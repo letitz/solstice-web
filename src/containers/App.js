@@ -1,37 +1,47 @@
 // This file bootstraps the app with the boilerplate necessary
 // to support hot reloading in Redux
-import React, {PropTypes} from 'react';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import FuelSavingsApp from '../components/FuelSavingsApp';
-import * as actions from '../actions/fuelSavingsActions';
+import React, {PropTypes} from "react";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
 
-class App extends React.Component {
-  render() {
+import SolsticeApp from "../components/SolsticeApp";
+import socketActionsFactory from "../actions/socketActionsFactory";
+import socketHandlerActions from "../actions/socketHandlerActions";
+import SocketClient from "../utils/SocketClient";
+
+const App = (props) => {
+    const onClick = (event) => {
+        const url = "ws://localhost:2244";
+        props.actions.socketActions.open(url);
+    };
     return (
-      <FuelSavingsApp appState={this.props.appState} actions={this.props.actions}/>
+        <SolsticeApp socket={props.socket} onClick={onClick} />
     );
-  }
-}
+};
 
 App.propTypes = {
-  actions: PropTypes.object.isRequired,
-  appState: PropTypes.object.isRequired
+    actions: PropTypes.object.isRequired,
+    socket: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
-  return {
-    appState: state.fuelSavingsAppState
-  };
+    return {
+        socket: state.socket
+    };
 }
 
 function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators(actions, dispatch)
-  };
+    const callbacks = bindActionCreators(socketHandlerActions, dispatch);
+    const socketClient = new SocketClient(callbacks);
+    const socketActions = socketActionsFactory(socketClient);
+    return {
+        actions: {
+            socketActions: bindActionCreators(socketActions, dispatch)
+        }
+    };
 }
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+    mapStateToProps,
+    mapDispatchToProps
 )(App);

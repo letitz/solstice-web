@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import App from './containers/App';
 import configureStore from './store/configureStore';
 import './styles/styles.scss'; //Yep, that's right. You can import SASS/CSS files too! Webpack will run the associated loader and plug this into the page.
+import SocketClient from "./utils/SocketClient";
 
 const store = configureStore();
 
