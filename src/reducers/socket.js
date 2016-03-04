@@ -1,11 +1,9 @@
 import objectAssign from "object-assign";
 
 import * as types from "../constants/ActionTypes";
-
-const STATE_OPENING = 0;
-const STATE_OPEN = 1;
-const STATE_CLOSING = 2;
-const STATE_CLOSED = 3;
+import {
+    STATE_OPENING, STATE_OPEN, STATE_CLOSING, STATE_CLOSED
+} from "../constants/socket.js";
 
 const initialState = {
     state: STATE_CLOSED,

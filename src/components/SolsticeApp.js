@@ -1,21 +1,27 @@
-import React, {PropTypes} from 'react';
+import React, {PropTypes} from "react";
 
-const App = (props) => {
-    const { onClick, socket } = props;
+import ConnectForm from  "../components/ConnectForm";
+import { STATE_OPEN } from "../constants/socket";
+
+const SolsticeApp = (props) => {
+    const { socket, actions } = props;
+    if (socket.state !== STATE_OPEN ) {
+        return (
+            <ConnectForm socket={socket}
+                socketActions={actions.socketActions}/>
+        );
+    }
     return (
         <div>
             <h1>Solstice web UI</h1>
-            <div>Socket state: {socket.state}</div>
-            <button onClick={onClick}>
-                Connect
-            </button>
+            <div>Socket open</div>
         </div>
     );
 };
 
-App.propTypes = {
-    onClick: PropTypes.func.isRequired,
-    socket: PropTypes.object.isRequired
+SolsticeApp.propTypes = {
+    socket: PropTypes.object.isRequired,
+    actions: PropTypes.object.isRequired
 };
 
-export default App;
+export default SolsticeApp;

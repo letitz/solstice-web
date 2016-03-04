@@ -9,15 +9,7 @@ import socketActionsFactory from "../actions/socketActionsFactory";
 import socketHandlerActions from "../actions/socketHandlerActions";
 import SocketClient from "../utils/SocketClient";
 
-const App = (props) => {
-    const onClick = (event) => {
-        const url = "ws://localhost:2244";
-        props.actions.socketActions.open(url);
-    };
-    return (
-        <SolsticeApp socket={props.socket} onClick={onClick} />
-    );
-};
+const App = (props) => (<SolsticeApp {...props} />);
 
 App.propTypes = {
     actions: PropTypes.object.isRequired,
