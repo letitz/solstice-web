@@ -7,6 +7,7 @@ export default (socketClient) => ({
         const action = { type: SOCKET_SET_OPENING };
         try {
             socketClient.open(url);
+            action.payload = url;
         } catch (err) {
             action.error = true;
             action.payload = err;

@@ -16,23 +16,23 @@ export default function socket(state = initialState, action) {
             if (action.error) {
                 return state;
             }
-            return objectAssign({}, state, { state: STATE_OPENING });
+            return { ...state, state: STATE_OPENING, url: action.payload };
 
         case types.SOCKET_SET_OPEN:
-            return objectAssign({}, state, { state: STATE_OPEN });
+            return { ...state, state: STATE_OPEN };
 
         case types.SOCKET_SET_CLOSING:
             if (action.error) {
                 return state;
             }
-            return objectAssign({}, state, { state: STATE_CLOSING });
+            return { ...state, state: STATE_CLOSING };
 
         case types.SOCKET_SET_CLOSED:
-            return objectAssign({}, state, { state: STATE_CLOSED });
+            return { ...state, state: STATE_CLOSED };
 
         case types.SOCKET_SET_ERROR:
             if (state.state === STATE_OPENING) {
-                return objectAssign({}, state, { state: STATE_CLOSED });
+                return { ...state, state: STATE_CLOSED };
             }
             return state;
 
@@ -48,4 +48,3 @@ export default function socket(state = initialState, action) {
             return state;
     }
 }
-

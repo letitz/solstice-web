@@ -5,9 +5,9 @@ import { STATE_CLOSED } from "../constants/socket";
 
 
 const ConnectForm = (props) => {
-    const { fields: { url }, handleSubmit, socket, socketActions } = props;
+    const { fields: { url }, handleSubmit, socket, socketOpen } = props;
     const submit = (values, dispatch) => {
-        dispatch(socketActions.open(values.url));
+        dispatch(socketOpen(values.url));
     };
     return (
         <form onSubmit={handleSubmit(submit)}>
@@ -24,7 +24,7 @@ ConnectForm.propTypes = {
     fields: PropTypes.object.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     socket: PropTypes.object.isRequired,
-    socketActions: PropTypes.object.isRequired
+    socketOpen: PropTypes.func.isRequired
 };
 
 export default reduxForm({
