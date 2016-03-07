@@ -34,3 +34,6 @@ dist
 
 # Mac files
 .DS_Store
+
+# Vim session file
+Session.vim
