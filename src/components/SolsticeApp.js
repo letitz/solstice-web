@@ -1,6 +1,7 @@
 import React, {PropTypes} from "react";
 
 import ConnectForm from  "../components/ConnectForm";
+import Header from "../components/Header";
 import SocketStatusPane from "../components/SocketStatusPane";
 
 import LoginStatusPane from "../containers/LoginStatusPane";
@@ -21,7 +22,7 @@ const SolsticeApp = (props) => {
     }
     return (
         <main>
-            <h1>Solstice web UI</h1>
+            <Header />
             <SocketStatusPane {...socket} />
             <LoginStatusPane socketSend={actions.socketActions.send}/>
             <RoomsPane socketSend={actions.socketActions.send}/>
