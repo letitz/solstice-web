@@ -12,8 +12,6 @@ import {
 
 const ID = "login-status-pane";
 
-const INTERVAL_MSEC = 60 * 1000;
-
 class LoginStatusPane extends React.Component
 {
     constructor(props) {
@@ -21,16 +19,7 @@ class LoginStatusPane extends React.Component
     }
 
     componentDidMount() {
-        const fetchStatus = () => {
-            this.props.socketSend(ControlRequest.loginStatus());
-        };
-        fetchStatus();
-        // Refresh login status periodically
-        this.interval_id = setInterval(fetchStatus, INTERVAL_MSEC);
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.interval_id);
+        this.props.socketSend(ControlRequest.loginStatus());
     }
 
     render_unknown() {
