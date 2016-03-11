@@ -13,18 +13,18 @@ export default {
         }
     }),
 
-    onerror: event => ({
-        type: SOCKET_SET_ERROR
-    }),
+    onerror: event => ({ type: SOCKET_SET_ERROR }),
 
-    onopen: event => (dispatch, getState) => ({
-        type: SOCKET_SET_OPEN
-    }),
+    onopen: event => ({ type: SOCKET_SET_OPEN }),
 
     onmessage: event => {
         const action = { type: SOCKET_RECEIVE_MESSAGE };
         try {
-            action.payload = JSON.parse(event.data);
+            const { variant, fields: [data] } = JSON.parse(event.data);
+            if (typeof variant === "undefined") {
+                throw new Error('Missing "variant" field in control response');
+            }
+            action.payload = { variant, data };
         } catch (err) {
             action.error = true;
             action.payload = err;

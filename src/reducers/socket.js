@@ -1,5 +1,3 @@
-import objectAssign from "object-assign";
-
 import * as types from "../constants/ActionTypes";
 import {
     STATE_OPENING, STATE_OPEN, STATE_CLOSING, STATE_CLOSED
@@ -10,7 +8,7 @@ const initialState = {
     url: null
 };
 
-export default function socket(state = initialState, action) {
+export default (state = initialState, action) => {
     switch (action.type) {
         case types.SOCKET_SET_OPENING:
             if (action.error) {
@@ -47,4 +45,4 @@ export default function socket(state = initialState, action) {
         default:
             return state;
     }
-}
+};
