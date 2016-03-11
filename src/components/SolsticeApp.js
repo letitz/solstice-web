@@ -4,6 +4,7 @@ import ConnectForm from  "../components/ConnectForm";
 import SocketStatusPane from "../components/SocketStatusPane";
 
 import LoginStatusPane from "../containers/LoginStatusPane";
+import RoomsPane from "../containers/RoomsPane";
 
 import { STATE_OPEN } from "../constants/socket";
 
@@ -23,6 +24,7 @@ const SolsticeApp = (props) => {
             <h1>Solstice web UI</h1>
             <SocketStatusPane {...socket} />
             <LoginStatusPane socketSend={actions.socketActions.send}/>
+            <RoomsPane socketSend={actions.socketActions.send}/>
         </main>
     );
 };
