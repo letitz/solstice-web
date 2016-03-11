@@ -34,14 +34,6 @@ export default (state = initialState, action) => {
             }
             return state;
 
-        case types.SOCKET_RECEIVE_MESSAGE:
-            console.log(`Socket received message: ${action.payload}`);
-            return state;
-
-        case types.SOCKET_SEND_MESSAGE:
-            console.log("Sending message");
-            return state;
-
         default:
             return state;
     }
