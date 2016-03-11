@@ -18,6 +18,7 @@ export default {
     onopen: event => ({ type: SOCKET_SET_OPEN }),
 
     onmessage: event => {
+        console.log(`Received message: ${event.data}`);
         const action = { type: SOCKET_RECEIVE_MESSAGE };
         try {
             const { variant, fields: [data] } = JSON.parse(event.data);
