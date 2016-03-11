@@ -1,5 +1,11 @@
+import { applyMiddleware } from "redux";
+import thunk from "redux-thunk";
+
+let configureStore;
 if (process.env.NODE_ENV === 'production') {
-  module.exports = require('./configureStore.prod');
+  configureStore = require('./configureStore.prod').default;
 } else {
-  module.exports = require('./configureStore.dev');
+  configureStore = require('./configureStore.dev').default;
 }
+
+export default () => configureStore(undefined, applyMiddleware(thunk));

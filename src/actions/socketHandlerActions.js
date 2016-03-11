@@ -17,7 +17,7 @@ export default {
         type: SOCKET_SET_ERROR
     }),
 
-    onopen: event => ({
+    onopen: event => (dispatch, getState) => ({
         type: SOCKET_SET_OPEN
     }),
 

@@ -2,12 +2,12 @@ import React, {PropTypes} from "react";
 import {reduxForm} from "redux-form";
 
 import { STATE_CLOSED } from "../constants/socket";
-
+import ControlRequest from "../utils/ControlRequest";
 
 const ConnectForm = (props) => {
-    const { fields: { url }, handleSubmit, socket, socketOpen } = props;
+    const { fields: { url }, handleSubmit, socket, socketActions } = props;
     const submit = (values, dispatch) => {
-        dispatch(socketOpen(values.url));
+        dispatch(socketActions.open(values.url));
     };
     return (
         <form onSubmit={handleSubmit(submit)}>
@@ -24,7 +24,7 @@ ConnectForm.propTypes = {
     fields: PropTypes.object.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     socket: PropTypes.object.isRequired,
-    socketOpen: PropTypes.func.isRequired
+    socketActions: PropTypes.object.isRequired
 };
 
 export default reduxForm({

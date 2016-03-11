@@ -2,16 +2,18 @@
 //This boilerplate file is likely to be the same for each project that uses Redux.
 //With Redux, the actual stores are in /reducers.
 
-import { createStore } from 'redux';
-import rootReducer from '../reducers';
+import { createStore } from "redux";
+import rootReducer from "../reducers";
 
-export default function configureStore(initialState) {
-  let store;
+export default function configureStore(initialState, enhancer) {
+  let createStoreModded;
   if (window.devToolsExtension) { //Enable Redux devtools if the extension is installed in developer's browser
-    store = window.devToolsExtension()(createStore)(rootReducer, initialState);
+    createStoreModded = window.devToolsExtension()(createStore);
   } else {
-    store = createStore(rootReducer, initialState);
+    createStoreModded = createStore;
   }
+
+  const store = createStoreModded(rootReducer, initialState, enhancer);
 
   if (module.hot) {
     // Enable Webpack hot module replacement for reducers
