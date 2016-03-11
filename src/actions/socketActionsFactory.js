@@ -30,6 +30,7 @@ export default (socketClient) => ({
         const action = { type: SOCKET_SEND_MESSAGE };
         try {
             socketClient.send(JSON.stringify(message));
+            action.payload = message;
         } catch (err) {
             action.error = true;
             action.payload = err;
