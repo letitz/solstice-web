@@ -1,8 +1,9 @@
 import React, {PropTypes} from "react";
 
-import ConnectForm from  "../components/ConnectForm";
-import Header from "../components/Header";
-import SocketStatusPane from "../components/SocketStatusPane";
+import ConnectForm from  "./ConnectForm";
+import Header from "./Header";
+import Footer from "./Footer";
+import SocketStatusPane from "./SocketStatusPane";
 
 import LoginStatusPane from "../containers/LoginStatusPane";
 import RoomsPane from "../containers/RoomsPane";
@@ -21,12 +22,13 @@ const SolsticeApp = (props) => {
         );
     }
     return (
-        <main>
+        <div id="solstice-app">
             <Header />
-            <SocketStatusPane {...socket} />
-            <LoginStatusPane socketSend={actions.socketActions.send}/>
-            <RoomsPane socketSend={actions.socketActions.send}/>
-        </main>
+            <main>
+                <RoomsPane socketSend={actions.socketActions.send}/>
+            </main>
+            <Footer socket={socket} socketActions={actions.socketActions} />
+        </div>
     );
 };
 

@@ -6,4 +6,104 @@ body {
     -moz-font-smoothing: antialiased;
     font-smoothing: antialiased;
     font-weight: 300;
+    padding: 0 !important;
+    margin: 0 !important;
+    height: 100%;
+}
+
+html {
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+}
+
+#app, #solstice-app {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#solstice-app {
+    display: flex;
+    flex-flow: column;
+}
+
+header {
+    margin: 0;
+    padding: 1.5em 2em;
+}
+
+header h1 {
+    margin: 0;
+}
+
+footer {
+    display: flex;
+}
+
+main {
+    height: 85%;
+    margin: 0;
+    padding: 0;
+}
+
+#rooms-pane {
+    display: flex;
+    border: solid grey 0.1em;
+    height: 100%;
+}
+
+#room-chat {
+    border: solid grey 0.1em;
+    padding: 2em;
+}
+
+#room-list {
+    flex: 1;
+    display: flex;
+    flex-flow: column;
+    border: solid grey 0.1em;
+    height: 100%;
+    overflow: auto;
+}
+
+#room-chat {
+    flex: 3;
+}
+
+#room-list-header {
+    display: flex;
+    flex-flow: row;
+    border: solid grey 0.1em;
+}
+
+#room-list-header div {
+    flex: 1;
+    border: solid grey 0.1em;
+}
+
+#room-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.room {
+    display: flex;
+    color: inherit;
+    text-decoration: inherit;
+    padding: .5em 1em;
+    border: solid grey 0.1em;
+}
+
+.room:hover {
+    background: lightgrey;
+}
+
+.room:active {
+    background: grey;
+}
+
+#login-status-pane, #socket-status-pane {
+    flex: 1;
 }

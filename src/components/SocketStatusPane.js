@@ -21,7 +21,7 @@ const SocketStatusPane = (props) => {
             string = `disconnected`;
             break;
     }
-    return <div>Connection status: {string}</div>;
+    return <div id="socket-status-pane">Connection status: {string}</div>;
 };
 
 SocketStatusPane.propTypes = {

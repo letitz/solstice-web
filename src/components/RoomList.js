@@ -1,26 +1,35 @@
 import React, { PropTypes } from "react";
 
 import Room from "./Room";
+import RoomListHeader from "./RoomListHeader";
 
-const RoomList = ({ rooms }) => {
+const RoomList = ({ refresh, rooms, roomActions }) => {
     const children = [];
+
     for (const [room_name, room_data] of rooms) {
+        const onClick = (event) => {
+            roomActions.select(room_name);
+        };
+
         children.push(
             <li key={room_name}>
-                <Room name={room_name} {...room_data} />
+                <Room onClick={onClick} name={room_name} {...room_data} />
             </li>
         );
     }
+
     return (
         <div id="room-list">
-            <div id="room-list-header">Room List</div>
+            <RoomListHeader refresh={refresh}/>
             <ul> {children} </ul>
         </div>
     );
 };
 
 RoomList.propTypes = {
-    rooms: PropTypes.object.isRequired
+    refresh: PropTypes.func.isRequired,
+    rooms: PropTypes.object.isRequired,
+    roomActions: PropTypes.object.isRequired
 };
 
 export default RoomList;

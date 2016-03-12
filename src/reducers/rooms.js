@@ -1,7 +1,8 @@
-import { SOCKET_RECEIVE_MESSAGE } from "../constants/ActionTypes";
+import { ROOM_SELECT, SOCKET_RECEIVE_MESSAGE } from "../constants/ActionTypes";
 
 const initialState = {
-    rooms: new Map()
+    rooms: new Map(),
+    selected: null
 };
 
 const reduceRoomList = (old_rooms, room_list) => {
@@ -47,6 +48,10 @@ export default (state = initialState, action) => {
     switch (type) {
         case SOCKET_RECEIVE_MESSAGE:
             return reduceReceiveMessage(state, payload);
+
+        case ROOM_SELECT:
+            return { ...state, selected: payload };
+
         default:
             return state;
     }
