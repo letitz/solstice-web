@@ -1,7 +1,13 @@
-import { ROOM_SELECT, SOCKET_RECEIVE_MESSAGE } from "../constants/ActionTypes";
+import Immutable from "immutable";
+
+import {
+    ROOM_JOIN,
+    ROOM_SELECT,
+    SOCKET_RECEIVE_MESSAGE
+} from "../constants/ActionTypes";
 
 const initialState = {
-    rooms: new Map(),
+    rooms: Immutable.OrderedMap(),
     selected: null
 };
 
@@ -19,13 +25,16 @@ const reduceRoomList = (old_rooms, room_list) => {
     });
 
     // Then build the new rooms map
-    const new_rooms = new Map();
+    let new_rooms = Immutable.OrderedMap();
     for (const [ room_name, room_data ] of room_list) {
         const old_data = old_rooms.get(room_name);
         if (old_data) {
-            new_rooms.set(room_name, { ...old_data, ...room_data });
+            new_rooms = new_rooms.set(room_name, {
+                ...old_data,
+                ...room_data
+            });
         } else {
-            new_rooms.set(room_name, room_data);
+            new_rooms = new_rooms.set(room_name, room_data);
         }
     }
     return new_rooms;
@@ -34,10 +43,11 @@ const reduceRoomList = (old_rooms, room_list) => {
 const reduceReceiveMessage = (state, payload) => {
     switch (payload.variant) {
         case "RoomListResponse":
-        {
-            const rooms = reduceRoomList(state.rooms, payload.data.rooms);
-            return { ...state, rooms };
-        }
+            return {
+                ...state,
+                rooms: reduceRoomList(state.rooms, payload.data.rooms)
+            };
+
         default:
             return state;
     }
@@ -50,7 +60,23 @@ export default (state = initialState, action) => {
             return reduceReceiveMessage(state, payload);
 
         case ROOM_SELECT:
-            return { ...state, selected: payload };
+            return {
+                ...state,
+                selected: payload
+            };
+
+        case ROOM_JOIN:
+        {
+            const rooms = state.rooms.merge({
+                [payload]: {
+                    joined: true
+                }
+            });
+            return {
+                ...state,
+                rooms
+            };
+        }
 
         default:
             return state;

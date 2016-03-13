@@ -2,32 +2,31 @@ import React, {PropTypes} from "react";
 
 import ConnectForm from  "./ConnectForm";
 import Header from "./Header";
-import Footer from "./Footer";
-import SocketStatusPane from "./SocketStatusPane";
 
-import LoginStatusPane from "../containers/LoginStatusPane";
 import RoomsPane from "../containers/RoomsPane";
+import Footer from "../containers/Footer";
 
 import { STATE_OPEN } from "../constants/socket";
+
+const ID = "solstice-app";
 
 const SolsticeApp = (props) => {
     const { actions, socket } = props;
     if (socket.state !== STATE_OPEN ) {
         return (
-            <main>
+            <div id={ID}>
                 <ConnectForm socket={socket}
-                    socketOpen={actions.socketActions.open}/>
-                <SocketStatusPane {...socket} />
-            </main>
+                    socketOpen={actions.socket.open}/>
+            </div>
         );
     }
     return (
-        <div id="solstice-app">
+        <div id={ID}>
             <Header />
             <main>
-                <RoomsPane socketSend={actions.socketActions.send}/>
+                <RoomsPane actions={actions}/>
             </main>
-            <Footer socket={socket} socketActions={actions.socketActions} />
+            <Footer actions={actions} />
         </div>
     );
 };

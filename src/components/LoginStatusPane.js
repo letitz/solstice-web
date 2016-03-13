@@ -88,6 +88,4 @@ LoginStatusPane.propTypes = {
     socketSend: PropTypes.func.isRequired
 };
 
-export default connect(
-    state => state.login
-)(LoginStatusPane);
+export default LoginStatusPane;

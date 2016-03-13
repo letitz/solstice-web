@@ -7,5 +7,10 @@ export default {
     roomList: () => ({
         "variant": "RoomListRequest",
         "fields": []
+    }),
+
+    joinRoom: (room) => ({
+        "variant": "JoinRoomRequest",
+        "fields": [{ room }]
     })
 };

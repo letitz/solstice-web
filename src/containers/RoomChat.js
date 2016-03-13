@@ -6,7 +6,7 @@ const RoomChat = ({ name }) => {
 };
 
 RoomChat.propTypes = {
-    name: PropTypes.string.isRequired
+    name: PropTypes.string
 };
 
 export default connect(
