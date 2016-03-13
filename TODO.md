@@ -1,6 +1,5 @@
 Things to do:
 -------------
 
- - Fix RoomList rendering
- - Make SocketStatusPane a container
- - Remove props from SolsticeApp
+ - can the socket be stored in a reducer?
+ - actually join rooms, display and send messages
