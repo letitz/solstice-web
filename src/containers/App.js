@@ -4,13 +4,11 @@ import React, {PropTypes} from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
-import SocketActionsFactory from "../actions/SocketActionsFactory";
+import RoomActions from "../actions/RoomActions";
+import SocketActions from "../actions/SocketActions";
 import SocketHandlerActions from "../actions/SocketHandlerActions";
-import RoomActionsFactory from "../actions/RoomActionsFactory";
 
 import SolsticeApp from "../components/SolsticeApp";
-
-import SocketClient from "../utils/SocketClient";
 
 const App = (props) => (<SolsticeApp {...props} />);
 
@@ -22,14 +20,11 @@ App.propTypes = {
 const mapStateToProps = ({ socket })  => ({ socket });
 
 function mapDispatchToProps(dispatch) {
-    const callbacks = bindActionCreators(SocketHandlerActions, dispatch);
-    const socketClient = new SocketClient(callbacks);
-    const socketActions = SocketActionsFactory(socketClient);
-    const roomActions = RoomActionsFactory(socketActions);
     return {
         actions: {
-            room: bindActionCreators(roomActions, dispatch),
-            socket: bindActionCreators(socketActions, dispatch)
+            room: bindActionCreators(RoomActions, dispatch),
+            socket: bindActionCreators(SocketActions, dispatch),
+            socketHandlers: bindActionCreators(SocketHandlerActions, dispatch)
         }
     };
 }

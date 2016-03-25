@@ -8,9 +8,7 @@ import {
 export default {
     onclose: event => ({
         type: SOCKET_SET_CLOSED,
-        payload: {
-            code: event.code
-        }
+        payload: event.code
     }),
 
     onerror: event => ({ type: SOCKET_SET_ERROR }),

@@ -15,8 +15,7 @@ const SolsticeApp = (props) => {
     if (socket.state !== STATE_OPEN ) {
         return (
             <div id={ID}>
-                <ConnectForm socket={socket}
-                    socketOpen={actions.socket.open}/>
+                <ConnectForm socket={socket} actions={actions} />
             </div>
         );
     }
