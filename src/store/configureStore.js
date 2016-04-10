@@ -12,8 +12,9 @@ if (process.env.NODE_ENV === 'production') {
 
 export default () => {
     const logger = createLogger();
+    const initialState = undefined;
     return configureStore(
-        undefined,
+        initialState,
         applyMiddleware(thunk, promise, logger)
     );
 };
