@@ -3,7 +3,6 @@ import {reduxForm} from "redux-form";
 
 import SocketStatusPane from "./SocketStatusPane";
 import { STATE_CLOSED } from "../constants/socket";
-import ControlRequest from "../utils/ControlRequest";
 
 const ConnectForm = (props) => {
     const { fields: { url }, handleSubmit, socket, actions } = props;

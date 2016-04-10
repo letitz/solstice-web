@@ -17,7 +17,6 @@ class RoomList extends React.Component {
 
         const children = [];
 
-        console.log(`Selected: "${selected}"`);
         for (const [room_name, room_data] of rooms) {
             const onClick = (event) => {
                 roomActions.select(room_name);

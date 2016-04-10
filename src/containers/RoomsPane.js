@@ -21,7 +21,11 @@ class RoomsPane extends React.Component {
                     roomActions={this.props.actions.room}
                     selected={this.props.selected}
                 />
-                <RoomChat />
+                <RoomChat
+                    name={this.props.selected}
+                    data={this.props.rooms.get(this.props.selected)}
+                    roomActions={this.props.actions.room}
+                />
             </div>
         );
     }
@@ -29,7 +33,8 @@ class RoomsPane extends React.Component {
 
 RoomsPane.propTypes = {
     actions: PropTypes.object.isRequired,
-    rooms: PropTypes.object.isRequired
+    rooms: PropTypes.object.isRequired,
+    selected: PropTypes.string
 };
 
 const mapStateToProps = (state) => state.rooms;
