@@ -1,42 +1,73 @@
 import React, { PropTypes } from "react";
-import { connect } from "react-redux";
 
-import RoomActions from "../actions/RoomActions";
 import RoomChatForm from "../components/RoomChatForm";
+import RoomChatMessageList from "../components/RoomChatMessageList";
 
-const RoomChat = ({ name, data, roomActions }) => {
-    if (!name) {
-        return <div id="room-chat">Select a room</div>;
+const ID = "room-chat";
+const ID_HEADER = "room-chat-header";
+
+class RoomChat extends React.Component {
+    constructor(props) {
+        super(props);
     }
 
-    // Append all messages in the chat room.
-    const children = [];
-    let i = 0;
-    for (const { user_name, message } of data.messages) {
-        children.push(
-            <li key={i} class="message">
-                {user_name}: {message}
-            </li>
-        );
-        i++;
+    componentDidMount() {
+        this.join_if_non_member(this.props);
     }
 
-    return (
-        <div id="room-chat">
-            <div id="room-chat-header">{name}</div>
-            <div id="room-chat-messages">
-                <ul>{children}</ul>
+    componentWillReceiveProps(props) {
+        this.join_if_non_member(props);
+    }
+
+    join_if_non_member(props) {
+        const { name, room, roomActions } = props;
+        if (room && room.membership == "NonMember") {
+            roomActions.join(name);
+        }
+    }
+
+    render_only_header(string) {
+        return (
+            <div id={ID}>
+                <div id={ID_HEADER}>
+                    {string}
+                </div>
             </div>
-            <RoomChatForm
-                name={name}
-                say={roomActions.say}
-            />
-        </div>
-    );
-};
+        );
+    }
+
+    render() {
+        const { name, room, roomActions } = this.props;
+
+        // If no room is selected, just tell the user to select one.
+        if (!name || !room) {
+            return this.render_only_header("Select a room");
+        }
+
+        switch (room.membership) {
+            case "NonMember":
+                return this.render_only_header(`Not a member of ${name}`);
+
+            case "Joining":
+                return this.render_only_header(`Joining ${name}`);
+
+            case "Leaving":
+                return this.render_only_header(`Leaving ${name}`);
+        }
+
+        // room.membership == "Member"
+        return (
+            <div id="room-chat">
+                <div id="room-chat-header">{name}</div>
+                <RoomChatMessageList messages={room.messages} />
+                <RoomChatForm name={name} say={roomActions.say} />
+            </div>
+        );
+    }
+}
 
 RoomChat.propTypes = {
-    data: PropTypes.object,
+    room: PropTypes.object,
     name: PropTypes.string,
     roomActions: PropTypes.object.isRequired
 };

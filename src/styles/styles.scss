@@ -58,7 +58,6 @@ main {
 
 #room-chat {
     border: solid grey 0.1em;
-    padding: 2em;
 }
 
 #room-list {
@@ -71,6 +70,35 @@ main {
 
 #room-chat {
     flex: 3;
+    display: flex;
+    flex-flow: column;
+}
+
+#room-chat-header {
+    text-align: center;
+    font-size: 1.3em;
+    padding: 0.8em;
+    border: solid grey 0.1em;
+}
+
+#room-chat-messages {
+    flex: 1;
+}
+
+#room-chat-form {
+    width: 100%;
+    border: solid grey 0.1em;
+}
+
+#room-chat-form form {
+    width: 100%;
+    display: flex;
+    flex-flow: row;
+}
+
+#room-chat-form input {
+    flex: 1;
+    padding: 0.8em;
 }
 
 #room-list-header {

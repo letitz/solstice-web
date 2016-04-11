@@ -43,14 +43,24 @@ const reduceRoomList = (old_rooms, room_list) => {
     return new_rooms;
 };
 
-const reduceReceiveMessage = (rooms, payload) => {
-    switch (payload.variant) {
+const reduceReceiveMessage = (rooms, { variant, data }) => {
+    switch (variant) {
+        case "JoinRoomResponse":
+        {
+            const { room_name } = data;
+            const room = rooms.get(room_name);
+            return rooms.set(room_name, {
+                ...room,
+                membership: "Member"
+            });
+        }
+
         case "RoomListResponse":
-            return reduceRoomList(rooms, payload.data.rooms);
+            return reduceRoomList(rooms, data.rooms);
 
         case "SayRoomResponse":
         {
-            const { room_name, user_name, message } = payload.data;
+            const { room_name, user_name, message } = data;
             const room_data = rooms.get(room_name);
             if (!room_data) {
                 console.log(`Error: room "${room_name} not found`);
@@ -88,10 +98,9 @@ export default (state = initialState, action) => {
 
         case ROOM_JOIN:
         {
-            const rooms = state.rooms.merge({
-                [payload]: {
-                    joined: true
-                }
+            const rooms = state.rooms.set(payload, {
+                ...state.rooms.get(payload),
+                membership: "Joining"
             });
             return {
                 ...state,

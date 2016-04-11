@@ -20,9 +20,6 @@ class RoomList extends React.Component {
         for (const [room_name, room_data] of rooms) {
             const onClick = (event) => {
                 roomActions.select(room_name);
-                if (!room_data.joined) {
-                    roomActions.join(room_name);
-                }
             };
 
             children.push(

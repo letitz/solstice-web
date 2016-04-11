@@ -14,17 +14,18 @@ class RoomsPane extends React.Component {
     }
 
     render() {
+        const { actions, rooms, selected } = this.props;
         return (
             <div id="rooms-pane">
                 <RoomList
-                    rooms={this.props.rooms}
-                    roomActions={this.props.actions.room}
-                    selected={this.props.selected}
+                    rooms={rooms}
+                    roomActions={actions.room}
+                    selected={selected}
                 />
                 <RoomChat
-                    name={this.props.selected}
-                    data={this.props.rooms.get(this.props.selected)}
-                    roomActions={this.props.actions.room}
+                    name={selected}
+                    room={rooms.get(selected)}
+                    roomActions={actions.room}
                 />
             </div>
         );

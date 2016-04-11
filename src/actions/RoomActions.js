@@ -11,7 +11,13 @@ import ControlRequest from "../utils/ControlRequest";
 export default ({
     getRoomList: () => SocketActions.send(ControlRequest.roomList()),
 
-    join: (room) => SocketActions.send(ControlRequest.joinRoom(room)),
+    join: (room) => (dispatch) => {
+        dispatch({
+            type: ROOM_JOIN,
+            payload: room
+        });
+        dispatch(SocketActions.send(ControlRequest.joinRoom(room)));
+    },
 
     select: (room) => ({
         type: ROOM_SELECT,
@@ -19,7 +25,6 @@ export default ({
     }),
 
     say: (room, message) => (dispatch) => {
-        dispatch(SocketActions.send(ControlRequest.sayRoom(room, message)));
         dispatch({
             type: ROOM_SAY,
             payload: {
@@ -27,5 +32,6 @@ export default ({
                 message
             }
         });
+        dispatch(SocketActions.send(ControlRequest.sayRoom(room, message)));
     }
 });
