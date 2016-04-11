@@ -12,19 +12,6 @@ const initialState = {
     selected: null
 };
 
-const reduceRoom = (old_room, new_room) => {
-    if (!old_room) {
-        return {
-            messages: Immutable.List(),
-            ...new_room
-        };
-    }
-    return {
-        ...old_room,
-        ...new_room
-    };
-};
-
 const reduceRoomList = (old_rooms, room_list) => {
     // First sort the room list by room name
     room_list.sort((room_pair_1, room_pair_2) => {
@@ -41,8 +28,16 @@ const reduceRoomList = (old_rooms, room_list) => {
     // Then build the new rooms map
     let new_rooms = Immutable.OrderedMap();
     for (const [ room_name, room_data ] of room_list) {
+        // Transform room_data.messages to an immutable list.
+        room_data.messages = Immutable.List(room_data.messages);
+        // Get the old room data.
         const old_data = old_rooms.get(room_name);
-        const new_data = reduceRoom(old_data, room_data);
+        // Merge the old data and the new data, overwriting with new data if
+        // conflicting.
+        const new_data = {
+            ...old_data,
+            ...room_data
+        };
         new_rooms = new_rooms.set(room_name, new_data);
     }
     return new_rooms;
