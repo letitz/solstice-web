@@ -64,7 +64,10 @@ class RoomChat extends React.Component {
                     login_user_name={login_user_name}
                     messages={room.messages}
                 />
-                <RoomChatForm name={name} say={roomActions.say} />
+                <RoomChatForm
+                    name={name}
+                    sendMessage={roomActions.sendMessage}
+                />
             </div>
         );
     }
@@ -79,7 +82,7 @@ RoomChat.propTypes = {
     }),
     roomActions: PropTypes.shape({
         join: PropTypes.func.isRequired,
-        say:  PropTypes.func.isRequired
+        sendMessage:  PropTypes.func.isRequired
     }).isRequired
 };
 

@@ -8,6 +8,6 @@ export const SOCKET_RECEIVE_MESSAGE = "SOCKET_RECEIVE_MESSAGE";
 export const SOCKET_SEND_MESSAGE    = "SOCKET_SEND_MESSAGE";
 
 // Room actions
-export const ROOM_SELECT = "ROOM_SELECT";
-export const ROOM_JOIN   = "ROOM_JOIN";
-export const ROOM_SAY    = "ROOM_SAY";
+export const ROOM_SELECT  = "ROOM_SELECT";
+export const ROOM_JOIN    = "ROOM_JOIN";
+export const ROOM_MESSAGE = "ROOM_MESSAGE";

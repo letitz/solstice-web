@@ -2,10 +2,10 @@ import React, {PropTypes} from "react";
 import {reduxForm} from "redux-form";
 
 const RoomChatForm = (props) => {
-    const { fields: { message }, handleSubmit, name, say } = props;
+    const { fields: { message }, handleSubmit, name, sendMessage } = props;
 
     const onSubmit = handleSubmit((values) => {
-        say(name, values.message);
+        sendMessage(name, values.message);
     });
 
     return (
@@ -20,10 +20,12 @@ const RoomChatForm = (props) => {
 };
 
 RoomChatForm.propTypes = {
-    fields: PropTypes.object.isRequired,
+    fields: PropTypes.shape({
+        message: PropTypes.string.isRequired
+    }),
     handleSubmit: PropTypes.func.isRequired,
     name: PropTypes.string,
-    say: PropTypes.func.isRequired
+    sendMessage: PropTypes.func.isRequired
 };
 
 export default reduxForm({

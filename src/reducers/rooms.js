@@ -2,7 +2,7 @@ import Immutable from "immutable";
 
 import {
     ROOM_JOIN,
-    ROOM_SAY,
+    ROOM_MESSAGE,
     ROOM_SELECT,
     SOCKET_RECEIVE_MESSAGE
 } from "../constants/ActionTypes";
@@ -58,7 +58,7 @@ const reduceReceiveMessage = (rooms, { variant, data }) => {
         case "RoomListResponse":
             return reduceRoomList(rooms, data.rooms);
 
-        case "SayRoomResponse":
+        case "RoomMessageResponse":
         {
             const { room_name, user_name, message } = data;
             const room_data = rooms.get(room_name);
@@ -87,7 +87,7 @@ export default (state = initialState, action) => {
                 rooms: reduceReceiveMessage(state.rooms, payload)
             };
 
-        case ROOM_SAY:
+        case ROOM_MESSAGE:
             return state;
 
         case ROOM_SELECT:

@@ -1,6 +1,6 @@
 import {
     ROOM_JOIN,
-    ROOM_SAY,
+    ROOM_MESSAGE,
     ROOM_SELECT
 } from "../constants/ActionTypes";
 
@@ -24,14 +24,14 @@ export default ({
         payload: room
     }),
 
-    say: (room, message) => (dispatch) => {
+    sendMessage: (room, message) => (dispatch) => {
         dispatch({
-            type: ROOM_SAY,
+            type: ROOM_MESSAGE,
             payload: {
                 room_name: room,
                 message
             }
         });
-        dispatch(SocketActions.send(ControlRequest.sayRoom(room, message)));
+        dispatch(SocketActions.send(ControlRequest.roomMessage(room, message)));
     }
 });

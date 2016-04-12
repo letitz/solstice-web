@@ -14,8 +14,8 @@ export default {
         fields: []
     }),
 
-    sayRoom: (room_name, message) => ({
-        variant: "SayRoomRequest",
+    roomMessage: (room_name, message) => ({
+        variant: "RoomMessageRequest",
         fields: [{
             room_name,
             message
