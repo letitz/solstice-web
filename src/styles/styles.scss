@@ -164,7 +164,7 @@ main {
     overflow-y: auto;
 }
 
-a.room {
+.room {
     display: flex;
     color: inherit;
     text-decoration: inherit;
@@ -172,16 +172,20 @@ a.room {
     border: solid grey 0.1em;
 }
 
-a.room:hover {
+.room:hover {
     background: lightgrey;
 }
 
-a.room:active {
+.room:active {
     background: grey;
 }
 
-a.room-selected {
-    background: orange;
+.room-joined {
+    background: lightgreen;
+}
+
+.room-selected {
+    background: lightblue;
 }
 
 #login-status-pane, #socket-status-pane {

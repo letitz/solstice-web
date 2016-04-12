@@ -24,8 +24,12 @@ class RoomList extends React.Component {
 
             children.push(
                 <li key={room_name}>
-                    <Room onClick={onClick} name={room_name} {...room_data}
-                        isSelected={selected == room_name} />
+                    <Room
+                        onClick={onClick}
+                        name={room_name}
+                        room={room_data}
+                        isSelected={selected == room_name}
+                    />
                 </li>
             );
         }
