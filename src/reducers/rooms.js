@@ -45,7 +45,7 @@ const reduceRoomList = (old_rooms, room_list) => {
 
 const reduceReceiveMessage = (rooms, { variant, data }) => {
     switch (variant) {
-        case "JoinRoomResponse":
+        case "RoomJoinResponse":
         {
             const { room_name } = data;
             const room = rooms.get(room_name);

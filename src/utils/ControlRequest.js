@@ -1,12 +1,12 @@
 export default {
-    joinRoom: (room) => ({
-        variant: "JoinRoomRequest",
-        fields: [room]
-    }),
-
     loginStatus: () => ({
         variant: "LoginStatusRequest",
         fields: []
+    }),
+
+    roomJoin: (room) => ({
+        variant: "RoomJoinRequest",
+        fields: [room]
     }),
 
     roomList: () => ({

@@ -16,7 +16,7 @@ export default ({
             type: ROOM_JOIN,
             payload: room
         });
-        dispatch(SocketActions.send(ControlRequest.joinRoom(room)));
+        dispatch(SocketActions.send(ControlRequest.roomJoin(room)));
     },
 
     select: (room) => ({
