@@ -41,6 +41,9 @@ header h1 {
 
 footer {
     display: flex;
+    padding: 0.5em;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 main {
@@ -69,20 +72,59 @@ main {
 }
 
 #room-chat {
-    flex: 3;
+    height: 100%;
+    width: 75%;
     display: flex;
     flex-flow: column;
+    justify-content: space-between;
 }
 
 #room-chat-header {
+    flex: 1;
     text-align: center;
     font-size: 1.3em;
     padding: 0.8em;
     border: solid grey 0.1em;
 }
 
-#room-chat-messages {
-    flex: 1;
+#room-chat-message-list {
+    display: block;
+    height: 84%;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 1em;
+
+    overflow: auto;
+
+    list-style: none;
+}
+
+.room-chat-message {
+    display: flex;
+    flex-flow: column;
+    align-items: flex-start;
+}
+
+.room-chat-message-me {
+    align-items: flex-end;
+}
+
+.room-chat-message-user {
+    font-weight: bold;
+    color: blue;
+}
+
+.room-chat-message-text {
+    padding: 0.5em 0.7em;
+    margin: 0.2em 0.5em;
+    border-radius: 0.8em;
+    background-color: lightgrey;
+}
+
+.room-chat-message-me > .room-chat-message-text {
+    background-color: blue;
+    color: white;
 }
 
 #room-chat-form {

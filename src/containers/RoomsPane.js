@@ -1,6 +1,7 @@
 import React, { PropTypes } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import ImmutablePropTypes from "react-immutable-proptypes";
 
 import RoomList from "../components/RoomList";
 
@@ -14,18 +15,19 @@ class RoomsPane extends React.Component {
     }
 
     render() {
-        const { actions, rooms, selected } = this.props;
+        const { login_user_name, rooms, roomActions, selected } = this.props;
         return (
             <div id="rooms-pane">
                 <RoomList
                     rooms={rooms}
-                    roomActions={actions.room}
+                    roomActions={roomActions}
                     selected={selected}
                 />
                 <RoomChat
+                    login_user_name={login_user_name}
                     name={selected}
                     room={rooms.get(selected)}
-                    roomActions={actions.room}
+                    roomActions={roomActions}
                 />
             </div>
         );
@@ -33,12 +35,17 @@ class RoomsPane extends React.Component {
 }
 
 RoomsPane.propTypes = {
-    actions: PropTypes.object.isRequired,
-    rooms: PropTypes.object.isRequired,
+    login_user_name: PropTypes.string.isRequired,
+    rooms: ImmutablePropTypes.orderedMap.isRequired,
+    roomActions: PropTypes.object.isRequired,
     selected: PropTypes.string
 };
 
-const mapStateToProps = (state) => state.rooms;
+const mapStateToProps = (state) => ({
+    login_user_name: state.login.username,
+    rooms: state.rooms.rooms,
+    selected: state.rooms.selected
+});
 
 export default connect(
     mapStateToProps,

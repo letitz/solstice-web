@@ -23,7 +23,7 @@ const SolsticeApp = (props) => {
         <div id={ID}>
             <Header />
             <main>
-                <RoomsPane actions={actions}/>
+                <RoomsPane roomActions={actions.room}/>
             </main>
             <Footer actions={actions} />
         </div>

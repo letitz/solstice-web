@@ -1,4 +1,5 @@
 import React, { PropTypes } from "react";
+import ImmutablePropTypes from "react-immutable-proptypes";
 
 import RoomChatForm from "../components/RoomChatForm";
 import RoomChatMessageList from "../components/RoomChatMessageList";
@@ -37,7 +38,7 @@ class RoomChat extends React.Component {
     }
 
     render() {
-        const { name, room, roomActions } = this.props;
+        const { login_user_name, name, room, roomActions } = this.props;
 
         // If no room is selected, just tell the user to select one.
         if (!name || !room) {
@@ -59,7 +60,10 @@ class RoomChat extends React.Component {
         return (
             <div id="room-chat">
                 <div id="room-chat-header">{name}</div>
-                <RoomChatMessageList messages={room.messages} />
+                <RoomChatMessageList
+                    login_user_name={login_user_name}
+                    messages={room.messages}
+                />
                 <RoomChatForm name={name} say={roomActions.say} />
             </div>
         );
@@ -67,9 +71,16 @@ class RoomChat extends React.Component {
 }
 
 RoomChat.propTypes = {
-    room: PropTypes.object,
+    login_user_name: PropTypes.string.isRequired,
     name: PropTypes.string,
-    roomActions: PropTypes.object.isRequired
+    room: PropTypes.shape({
+        membership: PropTypes.string.isRequired,
+        messages:   ImmutablePropTypes.list.isRequired
+    }),
+    roomActions: PropTypes.shape({
+        join: PropTypes.func.isRequired,
+        say:  PropTypes.func.isRequired
+    }).isRequired
 };
 
 export default RoomChat;

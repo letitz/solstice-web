@@ -1,28 +1,39 @@
 import React, { PropTypes } from "react";
 import ImmutablePropTypes from "react-immutable-proptypes";
 
-const RoomChatMessageList = ({ messages }) => {
+const RoomChatMessageList = ({ login_user_name, messages }) => {
     // Append all messages in the chat room.
     const children = [];
     let i = 0;
     for (const { user_name, message } of messages) {
-        children.push(
-            <li key={i} className="room-chat-message">
-                {user_name}: {message}
-            </li>
-        );
+        if (user_name == login_user_name) {
+            children.push(
+                <li key={i} className="room-chat-message room-chat-message-me">
+                    <div className="room-chat-message-text">{message}</div>
+                </li>
+            );
+        } else {
+            children.push(
+                <li key={i} className="room-chat-message">
+                    <div className="room-chat-message-user">{user_name}</div>
+                    <div className="room-chat-message-text">{message}</div>
+                </li>
+            );
+        }
         i++;
     }
 
-    return (
-        <div id="room-chat-messages">
-            <ul>{children}</ul>
-        </div>
-    );
+    return <ul id="room-chat-message-list">{children}</ul>;
 };
 
 RoomChatMessageList.propTypes = {
-    messages: ImmutablePropTypes.list.isRequired
+    login_user_name: PropTypes.string.isRequired,
+    messages: ImmutablePropTypes.listOf(
+        PropTypes.shape({
+            user_name: PropTypes.string.isRequired,
+            message:   PropTypes.string.isRequired
+        }).isRequired
+    ).isRequired
 };
 
 export default RoomChatMessageList;
