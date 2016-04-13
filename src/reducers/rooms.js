@@ -2,6 +2,7 @@ import Immutable from "immutable";
 
 import {
     ROOM_JOIN,
+    ROOM_LEAVE,
     ROOM_MESSAGE,
     ROOM_SELECT,
     SOCKET_RECEIVE_MESSAGE
@@ -55,6 +56,16 @@ const reduceReceiveMessage = (rooms, { variant, data }) => {
             });
         }
 
+        case "RoomLeaveResponse":
+        {
+            const room_name = data;
+            const room = rooms.get(room_name);
+            return rooms.set(room_name, {
+                ...room,
+                membership: "NonMember"
+            });
+        }
+
         case "RoomListResponse":
             return reduceRoomList(rooms, data.rooms);
 
@@ -101,6 +112,18 @@ export default (state = initialState, action) => {
             const rooms = state.rooms.set(payload, {
                 ...state.rooms.get(payload),
                 membership: "Joining"
+            });
+            return {
+                ...state,
+                rooms
+            };
+        }
+
+        case ROOM_LEAVE:
+        {
+            const rooms = state.rooms.set(payload, {
+                ...state.rooms.get(payload),
+                membership: "Leaving"
             });
             return {
                 ...state,

@@ -1,5 +1,6 @@
 import {
     ROOM_JOIN,
+    ROOM_LEAVE,
     ROOM_MESSAGE,
     ROOM_SELECT
 } from "../constants/ActionTypes";
@@ -11,27 +12,37 @@ import ControlRequest from "../utils/ControlRequest";
 export default ({
     getRoomList: () => SocketActions.send(ControlRequest.roomList()),
 
-    join: (room) => (dispatch) => {
+    join: (room_name) => (dispatch) => {
         dispatch({
             type: ROOM_JOIN,
-            payload: room
+            payload: room_name
         });
-        dispatch(SocketActions.send(ControlRequest.roomJoin(room)));
+        dispatch(SocketActions.send(ControlRequest.roomJoin(room_name)));
     },
 
-    select: (room) => ({
+    leave: (room_name) => (dispatch) => {
+        dispatch({
+            type: ROOM_LEAVE,
+            payload: room_name
+        });
+        dispatch(SocketActions.send(ControlRequest.roomLeave(room_name)));
+    },
+
+    select: (room_name) => ({
         type: ROOM_SELECT,
-        payload: room
+        payload: room_name
     }),
 
-    sendMessage: (room, message) => (dispatch) => {
+    sendMessage: (room_name, message) => (dispatch) => {
         dispatch({
             type: ROOM_MESSAGE,
             payload: {
-                room_name: room,
+                room_name,
                 message
             }
         });
-        dispatch(SocketActions.send(ControlRequest.roomMessage(room, message)));
+        dispatch(SocketActions.send(
+                    ControlRequest.roomMessage(room_name, message)
+        ));
     }
 });

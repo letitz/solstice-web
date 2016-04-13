@@ -4,9 +4,14 @@ export default {
         fields: []
     }),
 
-    roomJoin: (room) => ({
+    roomJoin: (room_name) => ({
         variant: "RoomJoinRequest",
-        fields: [room]
+        fields: [room_name]
+    }),
+
+    roomLeave: (room_name) => ({
+        variant: "RoomLeaveRequest",
+        fields: [room_name]
     }),
 
     roomList: () => ({

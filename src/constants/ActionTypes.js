@@ -10,4 +10,5 @@ export const SOCKET_SEND_MESSAGE    = "SOCKET_SEND_MESSAGE";
 // Room actions
 export const ROOM_SELECT  = "ROOM_SELECT";
 export const ROOM_JOIN    = "ROOM_JOIN";
+export const ROOM_LEAVE   = "ROOM_LEAVE";
 export const ROOM_MESSAGE = "ROOM_MESSAGE";
