@@ -3,11 +3,8 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import ImmutablePropTypes from "react-immutable-proptypes";
 
+import RoomChat from "../components/RoomChat";
 import RoomList from "../components/RoomList";
-
-import RoomChat from "../containers/RoomChat";
-
-import ControlRequest from "../utils/ControlRequest";
 
 class RoomsPane extends React.Component {
     constructor(props) {

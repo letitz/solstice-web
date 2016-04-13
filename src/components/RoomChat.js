@@ -1,9 +1,9 @@
 import React, { PropTypes } from "react";
 import ImmutablePropTypes from "react-immutable-proptypes";
 
-import RoomChatForm from "../components/RoomChatForm";
-import RoomChatHeader from "../components/RoomChatHeader";
-import RoomChatMessageList from "../components/RoomChatMessageList";
+import RoomChatForm from "./RoomChatForm";
+import RoomChatHeader from "./RoomChatHeader";
+import RoomChatMessageList from "./RoomChatMessageList";
 
 const ID = "room-chat";
 
