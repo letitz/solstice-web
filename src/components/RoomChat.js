@@ -21,16 +21,16 @@ class RoomChat extends React.Component {
     }
 
     join_if_non_member(props) {
-        const { name, room, roomActions } = props;
+        const { room, roomActions } = props;
         if (room && room.membership == "NonMember") {
-            roomActions.join(name);
+            roomActions.join(room.name);
         }
     }
 
     render() {
-        const { login_user_name, name, room, roomActions } = this.props;
+        const { login_user_name, room, roomActions } = this.props;
 
-        if (!name || !room) {
+        if (!room) {
             return (
                 <div id={ID}>
                     <RoomChatHeader
@@ -40,11 +40,16 @@ class RoomChat extends React.Component {
             );
         }
 
-        if (room.membership != "Member") {
+        const { name, membership, messages } = room;
+
+        if (membership != "Member") {
             return (
                 <div id={ID}>
                     <RoomChatHeader
-                        room={{ membership: room.membership, name}}
+                        room={{
+                            membership,
+                            name
+                        }}
                         roomActions={roomActions}
                     />
                 </div>
@@ -55,12 +60,15 @@ class RoomChat extends React.Component {
         return (
             <div id={ID}>
                 <RoomChatHeader
-                    room={{ membership: room.membership, name}}
+                    room={{
+                        membership,
+                        name
+                    }}
                     roomActions={roomActions}
                 />
                 <RoomChatMessageList
                     login_user_name={login_user_name}
-                    messages={room.messages}
+                    messages={messages}
                 />
                 <RoomChatForm
                     name={name}
@@ -72,9 +80,9 @@ class RoomChat extends React.Component {
 }
 
 RoomChat.propTypes = {
-    login_user_name: PropTypes.string.isRequired,
-    name: PropTypes.string,
+    login_user_name: PropTypes.string,
     room: PropTypes.shape({
+        name:       PropTypes.string.isRequired,
         membership: PropTypes.string.isRequired,
         messages:   ImmutablePropTypes.list.isRequired
     }),

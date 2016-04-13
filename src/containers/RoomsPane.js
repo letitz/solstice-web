@@ -13,6 +13,15 @@ class RoomsPane extends React.Component {
 
     render() {
         const { login_user_name, rooms, roomActions, selected } = this.props;
+
+        let room;
+        if (selected) {
+            room = {
+                ...rooms.get(selected),
+                name: selected
+            };
+        }
+
         return (
             <div id="rooms-pane">
                 <RoomList
@@ -22,8 +31,7 @@ class RoomsPane extends React.Component {
                 />
                 <RoomChat
                     login_user_name={login_user_name}
-                    name={selected}
-                    room={rooms.get(selected)}
+                    room={room}
                     roomActions={roomActions}
                 />
             </div>
@@ -32,7 +40,7 @@ class RoomsPane extends React.Component {
 }
 
 RoomsPane.propTypes = {
-    login_user_name: PropTypes.string.isRequired,
+    login_user_name: PropTypes.string,
     rooms: ImmutablePropTypes.orderedMap.isRequired,
     roomActions: PropTypes.object.isRequired,
     selected: PropTypes.string
