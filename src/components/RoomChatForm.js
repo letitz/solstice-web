@@ -2,16 +2,23 @@ import React, {PropTypes} from "react";
 import {reduxForm} from "redux-form";
 
 const RoomChatForm = (props) => {
-    const { fields: { message }, handleSubmit, name, sendMessage } = props;
+    const {
+        fields: { message },
+        handleSubmit,
+        resetForm,
+        roomName,
+        sendMessage
+    } = props;
 
     const onSubmit = handleSubmit((values) => {
-        sendMessage(name, values.message);
+        sendMessage(roomName, values.message);
+        resetForm();
     });
 
     return (
         <div id="room-chat-form">
             <form onSubmit={onSubmit}>
-                <input type="text" defaultValue="Type a message..."
+                <input type="text" placeholder="Type a message..."
                     {...message} />
                 <button type="submit">Send</button>
             </form>
@@ -21,10 +28,11 @@ const RoomChatForm = (props) => {
 
 RoomChatForm.propTypes = {
     fields: PropTypes.shape({
-        message: PropTypes.string.isRequired
-    }),
+        message: PropTypes.object.isRequired
+    }).isRequired,
     handleSubmit: PropTypes.func.isRequired,
-    name: PropTypes.string,
+    resetForm: PropTypes.func.isRequired,
+    roomName: PropTypes.string,
     sendMessage: PropTypes.func.isRequired
 };
 

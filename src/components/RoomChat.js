@@ -71,7 +71,7 @@ class RoomChat extends React.Component {
                     messages={messages}
                 />
                 <RoomChatForm
-                    name={name}
+                    roomName={name}
                     sendMessage={roomActions.sendMessage}
                 />
             </div>
