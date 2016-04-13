@@ -30,17 +30,21 @@ class RoomChat extends React.Component {
     render() {
         const { login_user_name, name, room, roomActions } = this.props;
 
-        // If no room is selected, just tell the user to select one.
         if (!name || !room) {
-            return <div id={ID}>Select a room</div>;
+            return (
+                <div id={ID}>
+                    <RoomChatHeader
+                        roomActions={roomActions}
+                    />
+                </div>
+            );
         }
 
         if (room.membership != "Member") {
             return (
                 <div id={ID}>
                     <RoomChatHeader
-                        room_name={name}
-                        membership={room.membership}
+                        room={{ membership: room.membership, name}}
                         roomActions={roomActions}
                     />
                 </div>
@@ -51,8 +55,7 @@ class RoomChat extends React.Component {
         return (
             <div id={ID}>
                 <RoomChatHeader
-                    room_name={name}
-                    membership={room.membership}
+                    room={{ membership: room.membership, name}}
                     roomActions={roomActions}
                 />
                 <RoomChatMessageList
