@@ -9,22 +9,22 @@ const initialState = {
     state: STATE_CLOSED
 };
 
-export default (state = initialState, action) => {
+export default (state = initialState, { type, payload }) => {
     const sendRequest = (controlRequest) => {
         try {
             state.socket.send(JSON.stringify(controlRequest));
         } catch (err) {
-            console.log(`Socket error: failed to send ${action.payload}`);
+            console.log(`Socket error: failed to send ${controlRequest}`);
         }
     };
 
-    switch (action.type) {
+    switch (type) {
         case types.SOCKET_SET_OPENING:
         {
             if (state.state !== STATE_CLOSED) {
                 console.log("Cannot open socket, already open");
             }
-            const { url, onopen, onclose, onerror, onmessage } = action.payload;
+            const { url, onopen, onclose, onerror, onmessage } = payload;
             const socket = new WebSocket(url);
             socket.onopen = onopen;
             socket.onclose = onclose;
@@ -53,13 +53,28 @@ export default (state = initialState, action) => {
             console.log("Socket error");
             return { ...state, state: state.socket.readyState };
 
-        case types.SOCKET_SEND_MESSAGE:
-            sendRequest(action.payload);
-            return state;
-
         case types.LOGIN_GET_STATUS:
             sendRequest(ControlRequest.loginStatus());
             return state;
+
+        case types.ROOM_GET_LIST:
+            sendRequest(ControlRequest.roomList());
+            return state;
+
+        case types.ROOM_JOIN:
+            sendRequest(ControlRequest.roomJoin(payload));
+            return state;
+
+        case types.ROOM_LEAVE:
+            sendRequest(ControlRequest.roomLeave(payload));
+            return state;
+
+        case types.ROOM_MESSAGE:
+        {
+            const { room_name, message } = payload;
+            sendRequest(ControlRequest.roomMessage(room_name, message));
+            return state;
+        }
 
         default:
             return state;

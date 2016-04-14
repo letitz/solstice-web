@@ -11,7 +11,8 @@ export const SOCKET_SEND_MESSAGE    = "SOCKET_SEND_MESSAGE";
 export const LOGIN_GET_STATUS = "LOGIN_GET_STATUS";
 
 // Room actions
-export const ROOM_SELECT  = "ROOM_SELECT";
-export const ROOM_JOIN    = "ROOM_JOIN";
-export const ROOM_LEAVE   = "ROOM_LEAVE";
-export const ROOM_MESSAGE = "ROOM_MESSAGE";
+export const ROOM_GET_LIST = "ROOM_GET_LIST";
+export const ROOM_SELECT   = "ROOM_SELECT";
+export const ROOM_JOIN     = "ROOM_JOIN";
+export const ROOM_LEAVE    = "ROOM_LEAVE";
+export const ROOM_MESSAGE  = "ROOM_MESSAGE";

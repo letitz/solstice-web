@@ -9,7 +9,7 @@ class RoomList extends React.Component {
     }
 
     componentDidMount() {
-        this.props.roomActions.getRoomList();
+        this.props.roomActions.getList();
     }
 
     render() {
@@ -36,7 +36,7 @@ class RoomList extends React.Component {
 
         return (
             <div id="room-list">
-                <RoomListHeader refresh={this.props.roomActions.getRoomList}/>
+                <RoomListHeader refresh={this.props.roomActions.getList}/>
                 <ul> {children} </ul>
             </div>
         );
@@ -45,7 +45,9 @@ class RoomList extends React.Component {
 
 RoomList.propTypes = {
     rooms: PropTypes.object.isRequired,
-    roomActions: PropTypes.object.isRequired,
+    roomActions: PropTypes.shape({
+        getList: PropTypes.func.isRequired
+    }).isRequired,
     selected: PropTypes.string
 };
 
