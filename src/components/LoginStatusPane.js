@@ -1,7 +1,6 @@
 import React, { PropTypes } from "react";
 import { connect } from "react-redux";
 
-import ControlRequest from "../utils/ControlRequest";
 import propTypeSymbol from "../utils/propTypeSymbol";
 import {
     LOGIN_STATUS_UNKNOWN,
@@ -20,9 +19,9 @@ class LoginStatusPane extends React.Component
     }
 
     componentDidMount() {
-        const { status, socketSend } = this.props;
+        const { status, loginActions } = this.props;
         if (status == LOGIN_STATUS_UNKNOWN) {
-            this.props.socketSend(ControlRequest.loginStatus());
+            loginActions.getStatus();
         }
     }
 
@@ -99,7 +98,9 @@ LoginStatusPane.propTypes = {
     username: PropTypes.string,
     motd: PropTypes.string,
     reason: PropTypes.string,
-    socketSend: PropTypes.func.isRequired
+    loginActions: PropTypes.shape({
+        getStatus: PropTypes.func.isRequired
+    }).isRequired
 };
 
 export default LoginStatusPane;

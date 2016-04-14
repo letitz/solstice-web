@@ -1,7 +1,7 @@
-import { LOGIN_GET_STATUS } from "../actions/ActionTypes";
+import { LOGIN_GET_STATUS } from "../constants/ActionTypes";
 
 export default {
-    requestStatus: () => ({
-        type: LOGIN_GET_STATUS,
+    getStatus: () => ({
+        type: LOGIN_GET_STATUS
     })
 };

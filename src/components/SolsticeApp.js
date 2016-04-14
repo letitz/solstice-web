@@ -26,7 +26,7 @@ const SolsticeApp = (props) => {
         return (
             <div id={ID}>
                 <ConnectForm socket={socket} actions={actions} />
-                <LoginStatusPane {...login} socketSend={actions.socket.send} />
+                <LoginStatusPane {...login} loginActions={actions.login} />
             </div>
         );
     }

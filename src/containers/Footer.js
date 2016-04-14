@@ -8,7 +8,7 @@ const Footer = ({ actions, login, socket }) => {
     return (
         <footer>
             <SocketStatusPane {...socket} />
-            <LoginStatusPane {...login} socketSend={actions.socket.send} />
+            <LoginStatusPane {...login} loginActions={actions.login} />
         </footer>
     );
 };

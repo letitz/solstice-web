@@ -1,13 +1,23 @@
 import * as types from "../constants/ActionTypes";
 import {
     STATE_OPENING, STATE_OPEN, STATE_CLOSING, STATE_CLOSED
-} from "../constants/socket.js";
+} from "../constants/socket";
+
+import ControlRequest from "../utils/ControlRequest";
 
 const initialState = {
     state: STATE_CLOSED
 };
 
 export default (state = initialState, action) => {
+    const sendRequest = (controlRequest) => {
+        try {
+            state.socket.send(JSON.stringify(controlRequest));
+        } catch (err) {
+            console.log(`Socket error: failed to send ${action.payload}`);
+        }
+    };
+
     switch (action.type) {
         case types.SOCKET_SET_OPENING:
         {
@@ -44,11 +54,11 @@ export default (state = initialState, action) => {
             return { ...state, state: state.socket.readyState };
 
         case types.SOCKET_SEND_MESSAGE:
-            try {
-                state.socket.send(JSON.stringify(action.payload));
-            } catch (err) {
-                console.log(`Socket error: failed to send ${action.payload}`);
-            }
+            sendRequest(action.payload);
+            return state;
+
+        case types.LOGIN_GET_STATUS:
+            sendRequest(ControlRequest.loginStatus());
             return state;
 
         default:

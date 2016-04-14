@@ -4,6 +4,7 @@ import React, {PropTypes} from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
+import LoginActions from "../actions/LoginActions";
 import RoomActions from "../actions/RoomActions";
 import SocketActions from "../actions/SocketActions";
 import SocketHandlerActions from "../actions/SocketHandlerActions";
@@ -23,6 +24,7 @@ const mapStateToProps = ({ socket, login })  => ({ socket, login });
 function mapDispatchToProps(dispatch) {
     return {
         actions: {
+            login: bindActionCreators(LoginActions, dispatch),
             room: bindActionCreators(RoomActions, dispatch),
             socket: bindActionCreators(SocketActions, dispatch),
             socketHandlers: bindActionCreators(SocketHandlerActions, dispatch)
