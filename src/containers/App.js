@@ -14,10 +14,11 @@ const App = (props) => (<SolsticeApp {...props} />);
 
 App.propTypes = {
     actions: PropTypes.object.isRequired,
+    login: PropTypes.object.isRequired,
     socket: PropTypes.object.isRequired
 };
 
-const mapStateToProps = ({ socket })  => ({ socket });
+const mapStateToProps = ({ socket, login })  => ({ socket, login });
 
 function mapDispatchToProps(dispatch) {
     return {

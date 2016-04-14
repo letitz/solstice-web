@@ -5,6 +5,7 @@ import ControlRequest from "../utils/ControlRequest";
 import propTypeSymbol from "../utils/propTypeSymbol";
 import {
     LOGIN_STATUS_UNKNOWN,
+    LOGIN_STATUS_GETTING,
     LOGIN_STATUS_PENDING,
     LOGIN_STATUS_SUCCESS,
     LOGIN_STATUS_FAILURE
@@ -19,13 +20,24 @@ class LoginStatusPane extends React.Component
     }
 
     componentDidMount() {
-        this.props.socketSend(ControlRequest.loginStatus());
+        const { status, socketSend } = this.props;
+        if (status == LOGIN_STATUS_UNKNOWN) {
+            this.props.socketSend(ControlRequest.loginStatus());
+        }
     }
 
     render_unknown() {
         return (
             <div id={ID}>
-                Fetching login status...
+                Login status: unknown
+            </div>
+        );
+    }
+
+    render_getting() {
+        return (
+            <div id={ID}>
+                Login status: fetching...
             </div>
         );
     }
@@ -70,6 +82,8 @@ class LoginStatusPane extends React.Component
         switch (this.props.status) {
             case LOGIN_STATUS_UNKNOWN:
                 return this.render_unknown();
+            case LOGIN_STATUS_GETTING:
+                return this.render_getting();
             case LOGIN_STATUS_PENDING:
                 return this.render_pending();
             case LOGIN_STATUS_SUCCESS:

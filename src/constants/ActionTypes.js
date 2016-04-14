@@ -7,6 +7,9 @@ export const SOCKET_SET_ERROR       = "SOCKET_SET_ERROR";
 export const SOCKET_RECEIVE_MESSAGE = "SOCKET_RECEIVE_MESSAGE";
 export const SOCKET_SEND_MESSAGE    = "SOCKET_SEND_MESSAGE";
 
+// Login actions
+export const LOGIN_GET_STATUS = "LOGIN_GET_STATUS";
+
 // Room actions
 export const ROOM_SELECT  = "ROOM_SELECT";
 export const ROOM_JOIN    = "ROOM_JOIN";

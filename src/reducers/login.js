@@ -1,6 +1,11 @@
-import { SOCKET_RECEIVE_MESSAGE } from "../constants/ActionTypes";
+import {
+    LOGIN_GET_STATUS,
+    SOCKET_RECEIVE_MESSAGE
+} from "../constants/ActionTypes";
+
 import {
     LOGIN_STATUS_UNKNOWN,
+    LOGIN_STATUS_GETTING,
     LOGIN_STATUS_PENDING,
     LOGIN_STATUS_SUCCESS,
     LOGIN_STATUS_FAILURE
@@ -10,13 +15,9 @@ const initialState = {
     status: LOGIN_STATUS_UNKNOWN
 };
 
-export default (state = initialState, action) => {
-    const { type, payload } = action;
-    if (type !== SOCKET_RECEIVE_MESSAGE) {
-        return state;
-    }
+const reduceReceiveMessage = (state, message) => {
+    const { variant, data } = message;
 
-    const { variant, data } = payload;
     if (variant !== "LoginStatusResponse") {
         return state;
     }
@@ -49,6 +50,23 @@ export default (state = initialState, action) => {
                 reason
             };
         }
+
+        default:
+            return state;
+    }
+};
+
+export default (state = initialState, action) => {
+    const { type, payload } = action;
+    switch (type) {
+        case LOGIN_GET_STATUS:
+            return {
+                ...state,
+                status: LOGIN_STATUS_GETTING
+            };
+
+        case SOCKET_RECEIVE_MESSAGE:
+            return reduceReceiveMessage(state, payload);
 
         default:
             return state;
