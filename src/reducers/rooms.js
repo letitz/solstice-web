@@ -5,6 +5,8 @@ import {
     ROOM_LEAVE,
     ROOM_MESSAGE,
     ROOM_SELECT,
+    ROOM_SHOW_USERS,
+    ROOM_HIDE_USERS,
     SOCKET_RECEIVE_MESSAGE
 } from "../constants/ActionTypes";
 
@@ -124,6 +126,30 @@ export default (state = initialState, action) => {
             const rooms = state.rooms.set(payload, {
                 ...state.rooms.get(payload),
                 membership: "Leaving"
+            });
+            return {
+                ...state,
+                rooms
+            };
+        }
+
+        case ROOM_SHOW_USERS:
+        {
+            const rooms = state.rooms.set(payload, {
+                ...state.rooms.get(payload),
+                showUsers: true
+            });
+            return {
+                ...state,
+                rooms
+            };
+        }
+
+        case ROOM_HIDE_USERS:
+        {
+            const rooms = state.rooms.set(payload, {
+                ...state.rooms.get(payload),
+                showUsers: false
             });
             return {
                 ...state,

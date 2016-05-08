@@ -1,10 +1,11 @@
 import React, { PropTypes } from "react";
 import ImmutablePropTypes from "react-immutable-proptypes";
 
-const make_header = (title, button) => (
+const make_header = (title, showUsersButton, leaveButton) => (
     <div id="room-chat-header">
         <div id="room-chat-header-title">{title}</div>
-        {button}
+        {showUsersButton}
+        {leaveButton}
     </div>
 );
 
@@ -16,12 +17,26 @@ const RoomChatHeader = ({ room, roomActions }) => {
     switch (room.membership) {
         case "Member":
         {
-            const onClick = (event) => {
+            const onClickLeave = (event) => {
                 roomActions.select(null);
                 roomActions.leave(room.name);
             };
-            const button = <button onClick={onClick}>Leave</button>;
-            return make_header(room.name, button);
+            const leaveButton = <button onClick={onClickLeave}>Leave</button>;
+
+            let toggleUsersButton;
+            if (room.showUsers) {
+                const onClick = (event) => roomActions.hideUsers(room.name);
+                toggleUsersButton = (
+                    <button onClick={onClick}>Hide users</button>
+                );
+            } else {
+                const onClick = (event) => roomActions.showUsers(room.name);
+                toggleUsersButton = (
+                    <button onClick={onClick}>Show users</button>
+                );
+            }
+
+            return make_header(room.name, toggleUsersButton, leaveButton);
         }
 
         case "NonMember":
@@ -38,7 +53,8 @@ const RoomChatHeader = ({ room, roomActions }) => {
 RoomChatHeader.propTypes = {
     room: PropTypes.shape({
         membership: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired
+        name: PropTypes.string.isRequired,
+        showUsers: PropTypes.bool
     }),
     roomActions: PropTypes.shape({
         leave: PropTypes.func.isRequired,

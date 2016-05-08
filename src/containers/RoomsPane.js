@@ -5,6 +5,7 @@ import ImmutablePropTypes from "react-immutable-proptypes";
 
 import RoomChat from "../components/RoomChat";
 import RoomList from "../components/RoomList";
+import RoomUserList from "../components/RoomUserList";
 
 class RoomsPane extends React.Component {
     constructor(props) {
@@ -22,6 +23,11 @@ class RoomsPane extends React.Component {
             };
         }
 
+        let roomUserList;
+        if (room && room.showUsers) {
+            roomUserList = <RoomUserList users={room.members} />;
+        }
+
         return (
             <div id="rooms-pane">
                 <RoomList
@@ -29,11 +35,14 @@ class RoomsPane extends React.Component {
                     roomActions={roomActions}
                     selected={selected}
                 />
-                <RoomChat
-                    login_user_name={login_user_name}
-                    room={room}
-                    roomActions={roomActions}
-                />
+                <div id="room-selected-pane">
+                    <RoomChat
+                        login_user_name={login_user_name}
+                        room={room}
+                        roomActions={roomActions}
+                    />
+                    {roomUserList}
+                </div>
             </div>
         );
     }

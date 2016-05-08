@@ -40,18 +40,23 @@ class RoomChat extends React.Component {
             );
         }
 
-        const { name, membership, messages } = room;
+        const { name, membership, messages, showUsers } = room;
+
+        const header = (
+            <RoomChatHeader
+                room={{
+                    membership,
+                    name,
+                    showUsers
+                }}
+                roomActions={roomActions}
+            />
+        );
 
         if (membership != "Member") {
             return (
                 <div id={ID}>
-                    <RoomChatHeader
-                        room={{
-                            membership,
-                            name
-                        }}
-                        roomActions={roomActions}
-                    />
+                    {header}
                 </div>
             );
         }
@@ -59,13 +64,7 @@ class RoomChat extends React.Component {
         // room.membership == "Member"
         return (
             <div id={ID}>
-                <RoomChatHeader
-                    room={{
-                        membership,
-                        name
-                    }}
-                    roomActions={roomActions}
-                />
+                {header}
                 <RoomChatMessageList
                     login_user_name={login_user_name}
                     messages={messages}

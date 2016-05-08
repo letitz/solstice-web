@@ -3,7 +3,9 @@ import {
     ROOM_JOIN,
     ROOM_LEAVE,
     ROOM_MESSAGE,
-    ROOM_SELECT
+    ROOM_SELECT,
+    ROOM_SHOW_USERS,
+    ROOM_HIDE_USERS
 } from "../constants/ActionTypes";
 
 export default ({
@@ -32,5 +34,15 @@ export default ({
             room_name,
             message
         }
+    }),
+
+    showUsers: (room_name) => ({
+        type: ROOM_SHOW_USERS,
+        payload: room_name
+    }),
+
+    hideUsers: (room_name) => ({
+        type: ROOM_HIDE_USERS,
+        payload: room_name
     })
 });
