@@ -8,7 +8,10 @@ import SocketStatusPane from "../components/SocketStatusPane";
 const Footer = ({ login, socket }) => {
     return (
         <footer>
-            <SocketStatusPane {...socket} />
+            <SocketStatusPane
+                state={socket.get("state")}
+                url={socket.get("url")}
+            />
             <LoginStatusPane
                 status={login.get("status")}
                 username={login.get("username")}
@@ -20,8 +23,8 @@ const Footer = ({ login, socket }) => {
 };
 
 Footer.propTypes = {
-    login: ImmutablePropTypes.map.isRequired,
-    socket: PropTypes.object.isRequired
+    login:  ImmutablePropTypes.map.isRequired,
+    socket: ImmutablePropTypes.map.isRequired
 };
 
 const mapStateToProps = ({ socket, login }) => ({ socket, login });

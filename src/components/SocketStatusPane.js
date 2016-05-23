@@ -4,8 +4,7 @@ import {
     STATE_OPENING, STATE_OPEN, STATE_CLOSING, STATE_CLOSED
 } from "../constants/socket";
 
-const SocketStatusPane = (props) => {
-    const { state, url } = props;
+const SocketStatusPane = ({ state, url }) => {
     let string;
     switch (state) {
         case STATE_OPENING:

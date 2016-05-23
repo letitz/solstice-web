@@ -1,3 +1,5 @@
+import Immutable from "immutable";
+
 import * as types from "../constants/ActionTypes";
 import {
     STATE_OPENING, STATE_OPEN, STATE_CLOSING, STATE_CLOSED
@@ -5,14 +7,14 @@ import {
 
 import ControlRequest from "../utils/ControlRequest";
 
-const initialState = {
+const initialState = Immutable.Map({
     state: STATE_CLOSED
-};
+});
 
 export default (state = initialState, { type, payload }) => {
     const sendRequest = (controlRequest) => {
         try {
-            state.socket.send(JSON.stringify(controlRequest));
+            state.get("socket").send(JSON.stringify(controlRequest));
         } catch (err) {
             console.log(`Socket error: failed to send ${controlRequest}`);
         }
@@ -21,37 +23,38 @@ export default (state = initialState, { type, payload }) => {
     switch (type) {
         case types.SOCKET_SET_OPENING:
         {
-            if (state.state !== STATE_CLOSED) {
+            if (state.get("state") !== STATE_CLOSED) {
                 console.log("Cannot open socket, already open");
+                return state;
             }
+
             const { url, onopen, onclose, onerror, onmessage } = payload;
             const socket = new WebSocket(url);
             socket.onopen = onopen;
             socket.onclose = onclose;
             socket.onerror = onerror;
             socket.onmessage = onmessage;
-            return {
-                ...state,
-                state: STATE_OPENING,
-                socket,
-                url
-            };
+
+            return state
+                .set("state", STATE_OPENING)
+                .set("socket", socket)
+                .set("url", url);
         }
 
         case types.SOCKET_SET_OPEN:
-            return { ...state, state: STATE_OPEN };
+            return state.set("state", STATE_OPEN);
 
         case types.SOCKET_SET_CLOSING:
             // Ooh bad stateful reducing...
-            state.socket.close();
-            return { ...state, state: STATE_CLOSING };
+            state.get("socket").close();
+            return state.set("state", STATE_CLOSING);
 
         case types.SOCKET_SET_CLOSED:
-            return { ...state, state: STATE_CLOSED };
+            return state.set("state", STATE_CLOSED);
 
         case types.SOCKET_SET_ERROR:
             console.log("Socket error");
-            return { ...state, state: state.socket.readyState };
+            return state.set("state", state.get("socket").readyState);
 
         case types.LOGIN_GET_STATUS:
             sendRequest(ControlRequest.loginStatus());
