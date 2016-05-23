@@ -10,10 +10,13 @@ import {
 } from "../constants/ActionTypes";
 
 const initialState = {
-    rooms: Immutable.OrderedMap()
+    roomMap:        Immutable.OrderedMap(),
+    roomNameByHash: Immutable.Map()
 };
 
-const reduceRoomList = (oldRoomMap, roomList) => {
+const reduceRoomList = (state, roomList) => {
+    const { roomMap, roomNameByHash } = state;
+
     // First sort the room list by room name
     roomList.sort(([ roomName1 ], [ roomName2 ]) => {
         if (roomName1 < roomName2) {
@@ -31,123 +34,124 @@ const reduceRoomList = (oldRoomMap, roomList) => {
         // Transform room_data.messages to an immutable list.
         newRoomData.messages = Immutable.List(newRoomData.messages);
         // Get the old room data.
-        const oldRoomData = oldRoomMap.get(roomName);
+        const roomData = roomMap.get(roomName);
         // Merge the old data and the new data, overwriting with new data if
         // conflicting.
         const mergedRoomData = {
-            ...oldRoomData,
+            ...roomData,
             ...newRoomData
         };
         newRoomMap = newRoomMap.set(roomName, mergedRoomData);
     }
-    return newRoomMap;
+    return {
+        ...state,
+        roomMap: newRoomMap,
+        roomNameByHash
+    };
 };
 
-const reduceReceiveMessage = (rooms, { variant, data }) => {
+const reduceReceiveMessageRoom = (roomData, { variant, data }) => {
     switch (variant) {
         case "RoomJoinResponse":
-        {
-            const { room_name } = data;
-            const room = rooms.get(room_name);
-            return rooms.set(room_name, {
-                ...room,
+            return {
+                ...roomData,
                 membership: "Member"
-            });
-        }
+            };
 
         case "RoomLeaveResponse":
-        {
-            const room_name = data;
-            const room = rooms.get(room_name);
-            return rooms.set(room_name, {
-                ...room,
+            return {
+                ...roomData,
                 membership: "NonMember"
-            });
-        }
-
-        case "RoomListResponse":
-            return reduceRoomList(rooms, data.rooms);
+            };
 
         case "RoomMessageResponse":
         {
-            const { room_name, user_name, message } = data;
-            const room_data = rooms.get(room_name);
-            if (!room_data) {
-                console.log(`Error: room "${room_name} not found`);
-                return rooms;
-            }
-            const new_room_data = {
-                ...room_data,
-                messages: room_data.messages.push({ user_name, message })
+            const { user_name, message } = data;
+            return {
+                ...roomData,
+                messages: roomData.messages.push({ user_name, message })
             };
-            return rooms.set(room_name, new_room_data);
+        }
+    }
+};
+
+const reduceReceiveMessage = (state, message) => {
+    const { variant, data } = message;
+    switch (variant) {
+        case "RoomJoinResponse":
+        case "RoomLeaveResponse":
+        case "RoomMessageResponse":
+        {
+            const { room_name } = data;
+            const roomData = state.roomMap.get(room_name);
+            const roomMap = state.roomMap.set(room_name,
+                reduceReceiveMessageRoom(roomData, { variant, data })
+            );
+            return {
+                ...state,
+                roomMap
+            };
         }
 
+        case "RoomListResponse":
+            return reduceRoomList(state, data.rooms);
+
         default:
-            return rooms;
+            return state;
+    }
+};
+
+const reduceRoom = (roomData, { type, payload }) => {
+    switch (type) {
+        case ROOM_JOIN:
+            return {
+                ...roomData,
+                membership: "Joining"
+            };
+
+        case ROOM_LEAVE:
+            return {
+                ...roomData,
+                membership: "Leaving"
+            };
+
+        case ROOM_SHOW_USERS:
+            return {
+                ...roomData,
+                showUsers: true
+            };
+
+        case ROOM_HIDE_USERS:
+            return {
+                ...roomData,
+                showUsers: false
+            };
     }
 };
 
 export default (state = initialState, action) => {
     const { type, payload } = action;
+
     switch (type) {
         case SOCKET_RECEIVE_MESSAGE:
-            return {
-                ...state,
-                rooms: reduceReceiveMessage(state.rooms, payload)
-            };
-
-        case ROOM_MESSAGE:
-            return state;
+            return reduceReceiveMessage(state, payload);
 
         case ROOM_JOIN:
-        {
-            const rooms = state.rooms.set(payload, {
-                ...state.rooms.get(payload),
-                membership: "Joining"
-            });
-            return {
-                ...state,
-                rooms
-            };
-        }
-
         case ROOM_LEAVE:
-        {
-            const rooms = state.rooms.set(payload, {
-                ...state.rooms.get(payload),
-                membership: "Leaving"
-            });
-            return {
-                ...state,
-                rooms
-            };
-        }
-
         case ROOM_SHOW_USERS:
-        {
-            const rooms = state.rooms.set(payload, {
-                ...state.rooms.get(payload),
-                showUsers: true
-            });
-            return {
-                ...state,
-                rooms
-            };
-        }
-
         case ROOM_HIDE_USERS:
         {
-            const rooms = state.rooms.set(payload, {
-                ...state.rooms.get(payload),
-                showUsers: false
-            });
+            const roomData = state.roomMap.get(payload);
+            const roomMap = state.roomMap.set(payload,
+                reduceRoom(roomData, action)
+            );
             return {
                 ...state,
-                rooms
+                roomMap
             };
         }
 
+        case ROOM_MESSAGE:
         default:
             return state;
     }

@@ -15,7 +15,7 @@ class RoomsPane extends React.Component {
     }
 
     render() {
-        const { loginUserName, params, rooms, roomActions } = this.props;
+        const { loginUserName, params, roomMap, roomActions } = this.props;
 
         let roomName;
         let roomChat;
@@ -23,7 +23,7 @@ class RoomsPane extends React.Component {
         if (params && params.roomName) {
             roomName = decodeURIComponent(atob(params.roomName));
 
-            const { membership, messages, showUsers } = rooms.get(roomName);
+            const { membership, messages, showUsers } = roomMap.get(roomName);
             const room = {
                 name: roomName,
                 membership,
@@ -42,7 +42,7 @@ class RoomsPane extends React.Component {
         return (
             <div id="rooms-pane">
                 <RoomList
-                    rooms={rooms}
+                    roomMap={roomMap}
                     roomActions={roomActions}
                     selected={roomName}
                 />
@@ -59,12 +59,12 @@ RoomsPane.propTypes = {
     params:        PropTypes.shape({
         roomName: PropTypes.string
     }),
-    rooms:         ImmutablePropTypes.orderedMap.isRequired,
-    roomActions:   PropTypes.object.isRequired
+    roomMap:     ImmutablePropTypes.orderedMap.isRequired,
+    roomActions: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
-    rooms: state.rooms.rooms,
+    roomMap: state.rooms.roomMap,
     loginUserName: state.login.username
 });
 

@@ -13,11 +13,11 @@ class RoomList extends React.Component {
     }
 
     render() {
-        const { selected, rooms, roomActions } = this.props;
+        const { selected, roomMap, roomActions } = this.props;
 
         const children = [];
 
-        for (const [room_name, room_data] of rooms) {
+        for (const [room_name, room_data] of roomMap) {
             const onClick = (event) => {
                 roomActions.select(room_name);
             };
@@ -43,7 +43,7 @@ class RoomList extends React.Component {
 }
 
 RoomList.propTypes = {
-    rooms: PropTypes.object.isRequired,
+    roomMap: PropTypes.object.isRequired,
     roomActions: PropTypes.shape({
         getList: PropTypes.func.isRequired
     }).isRequired,
