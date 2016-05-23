@@ -23,20 +23,24 @@ class RoomsPane extends React.Component {
         if (params && params.roomName) {
             roomName = decodeURIComponent(atob(params.roomName));
 
-            const { membership, messages, showUsers } = roomMap.get(roomName);
-            const room = {
-                name: roomName,
-                membership,
-                messages,
-                showUsers
-            };
-            roomChat = (
-                <RoomChat
-                    loginUserName={loginUserName}
-                    room={room}
-                    roomActions={roomActions}
-                />
-            );
+            const roomData = roomMap.get(roomName);
+
+            if (roomData) {
+                const room = {
+                    name: roomName,
+                    membership: roomData.get("membership"),
+                    messages:   roomData.get("messages"),
+                    showUsers:  roomData.get("showUsers")
+                };
+
+                roomChat = (
+                    <RoomChat
+                        loginUserName={loginUserName}
+                        room={room}
+                        roomActions={roomActions}
+                    />
+                );
+            }
         }
 
         return (
@@ -44,7 +48,6 @@ class RoomsPane extends React.Component {
                 <RoomList
                     roomMap={roomMap}
                     roomActions={roomActions}
-                    selected={roomName}
                 />
                 <div id="room-selected-pane">
                     {roomChat}

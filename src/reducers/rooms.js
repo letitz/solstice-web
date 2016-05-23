@@ -32,16 +32,19 @@ const reduceRoomList = (state, roomList) => {
     let newRoomMap = Immutable.OrderedMap();
 
     for (const [ roomName, newRoomData ] of roomList) {
-        // Transform room_data.messages to an immutable list.
-        newRoomData.messages = Immutable.List(newRoomData.messages);
         // Get the old room data.
-        const roomData = roomMap.get(roomName);
+        let roomData = roomMap.get(roomName);
+        if (roomData) {
+            // Scrap the old message list, we only want the new message list.
+            roomData.remove("messages");
+        } else {
+            // If the room did not exist, make up an empty one.
+            roomData = Immutable.Map();
+        }
         // Merge the old data and the new data, overwriting with new data if
         // conflicting.
-        const mergedRoomData = {
-            ...roomData,
-            ...newRoomData
-        };
+        const mergedRoomData = roomData.merge(newRoomData);
+        // Insert that in the new room map.
         newRoomMap = newRoomMap.set(roomName, mergedRoomData);
     }
 
@@ -53,24 +56,17 @@ const reduceRoomList = (state, roomList) => {
 const reduceReceiveMessageRoom = (roomData, { variant, data }) => {
     switch (variant) {
         case "RoomJoinResponse":
-            return {
-                ...roomData,
-                membership: "Member"
-            };
+            return roomData.set("membership", "Member");
 
         case "RoomLeaveResponse":
-            return {
-                ...roomData,
-                membership: "NonMember"
-            };
+            return roomData.set("membership", "NonMember");
 
         case "RoomMessageResponse":
         {
             const { user_name, message } = data;
-            return {
-                ...roomData,
-                messages: roomData.messages.push({ user_name, message })
-            };
+            const messages = roomData.get("messages")
+                .push({user_name, message});
+            return roomData.set("messages", messages);
         }
     }
 };
@@ -83,7 +79,6 @@ const reduceReceiveMessage = (state, message) => {
         case "RoomMessageResponse":
         {
             const { room_name } = data;
-            const roomMap = state.get("roomMap");
             return state.updateIn(["roomMap", data.room_name], (roomData) => {
                 if (roomData) {
                     return reduceReceiveMessageRoom(roomData, message);
@@ -105,28 +100,16 @@ const reduceReceiveMessage = (state, message) => {
 const reduceRoom = (roomData, { type, payload }) => {
     switch (type) {
         case ROOM_JOIN:
-            return {
-                ...roomData,
-                membership: "Joining"
-            };
+            return roomData.set("membership", "Joining");
 
         case ROOM_LEAVE:
-            return {
-                ...roomData,
-                membership: "Leaving"
-            };
+            return roomData.set("membership", "Leaving");
 
         case ROOM_SHOW_USERS:
-            return {
-                ...roomData,
-                showUsers: true
-            };
+            return roomData.set("showUsers", true);
 
         case ROOM_HIDE_USERS:
-            return {
-                ...roomData,
-                showUsers: false
-            };
+            return roomData.set("showUsers", false);
     }
 };
 

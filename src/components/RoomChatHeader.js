@@ -58,8 +58,7 @@ RoomChatHeader.propTypes = {
         showUsers: PropTypes.bool
     }),
     roomActions: PropTypes.shape({
-        leave: PropTypes.func.isRequired,
-        select: PropTypes.func.isRequired
+        leave: PropTypes.func.isRequired
     }).isRequired,
     router: PropTypes.object.isRequired
 };

@@ -1,9 +1,9 @@
 import React, { PropTypes } from "react";
 import { Link } from "react-router";
 
-const Room = ({ name, room }) => {
+const Room = ({ name, membership, userCount }) => {
     const classes = ["room"];
-    if (room.membership == "Member") {
+    if (membership == "Member") {
         classes.push("room-joined");
     }
 
@@ -16,17 +16,15 @@ const Room = ({ name, room }) => {
             className={classes.join(" ")}
         >
             <span className="room-name">{name}</span>
-            <span className="room-user-count">({room.user_count})</span>
+            <span className="room-user-count">({userCount})</span>
         </Link>
     );
 };
 
 Room.propTypes = {
     name: PropTypes.string.isRequired,
-    room: PropTypes.shape({
-        membership: PropTypes.string.isRequired,
-        user_count: PropTypes.number.isRequired
-    })
+    membership: PropTypes.string.isRequired,
+    userCount: PropTypes.number.isRequired
 };
 
 export default Room;

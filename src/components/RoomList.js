@@ -13,7 +13,7 @@ class RoomList extends React.Component {
     }
 
     render() {
-        const { selected, roomMap, roomActions } = this.props;
+        const { roomMap, roomActions } = this.props;
 
         const children = [];
 
@@ -22,7 +22,8 @@ class RoomList extends React.Component {
                 <li key={roomName}>
                     <Room
                         name={roomName}
-                        room={roomData}
+                        membership={roomData.get("membership")}
+                        userCount={roomData.get("user_count")}
                     />
                 </li>
             );
@@ -41,8 +42,7 @@ RoomList.propTypes = {
     roomMap: PropTypes.object.isRequired,
     roomActions: PropTypes.shape({
         getList: PropTypes.func.isRequired
-    }).isRequired,
-    selected: PropTypes.string
+    }).isRequired
 };
 
 export default RoomList;
