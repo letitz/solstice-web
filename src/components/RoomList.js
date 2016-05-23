@@ -28,7 +28,6 @@ class RoomList extends React.Component {
                         onClick={onClick}
                         name={room_name}
                         room={room_data}
-                        isSelected={selected == room_name}
                     />
                 </li>
             );

@@ -1,9 +1,13 @@
 import React, { PropTypes } from "react";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
 import ImmutablePropTypes from "react-immutable-proptypes";
 
-import RoomChatForm from "./RoomChatForm";
-import RoomChatHeader from "./RoomChatHeader";
-import RoomChatMessageList from "./RoomChatMessageList";
+import RoomActions from "../actions/RoomActions";
+
+import RoomChatForm from "../components/RoomChatForm";
+import RoomChatHeader from "../components/RoomChatHeader";
+import RoomChatMessageList from "../components/RoomChatMessageList";
 
 const ID = "room-chat";
 
@@ -28,7 +32,7 @@ class RoomChat extends React.Component {
     }
 
     render() {
-        const { login_user_name, room, roomActions } = this.props;
+        const { loginUserName, room, roomActions } = this.props;
 
         if (!room) {
             return (
@@ -66,7 +70,7 @@ class RoomChat extends React.Component {
             <div id={ID}>
                 {header}
                 <RoomChatMessageList
-                    login_user_name={login_user_name}
+                    loginUserName={loginUserName}
                     messages={messages}
                 />
                 <RoomChatForm
@@ -79,11 +83,12 @@ class RoomChat extends React.Component {
 }
 
 RoomChat.propTypes = {
-    login_user_name: PropTypes.string,
+    loginUserName: PropTypes.string,
     room: PropTypes.shape({
         name:       PropTypes.string.isRequired,
         membership: PropTypes.string.isRequired,
-        messages:   ImmutablePropTypes.list.isRequired
+        messages:   ImmutablePropTypes.list.isRequired,
+        showUsers:  PropTypes.bool
     }),
     roomActions: PropTypes.shape({
         join: PropTypes.func.isRequired,

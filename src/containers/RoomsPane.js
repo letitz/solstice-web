@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import ImmutablePropTypes from "react-immutable-proptypes";
 
+import RoomActions from "../actions/RoomActions";
+
 import RoomChat from "../components/RoomChat";
 import RoomList from "../components/RoomList";
 import RoomUserList from "../components/RoomUserList";
@@ -13,19 +15,28 @@ class RoomsPane extends React.Component {
     }
 
     render() {
-        const { login_user_name, rooms, roomActions, selected } = this.props;
+        const { loginUserName, params, rooms, roomActions } = this.props;
 
-        let room;
-        if (selected) {
-            room = {
-                ...rooms.get(selected),
-                name: selected
+        let roomName;
+        let roomChat;
+
+        if (params && params.roomName) {
+            roomName = decodeURIComponent(atob(params.roomName));
+
+            const { membership, messages, showUsers } = rooms.get(roomName);
+            const room = {
+                name: roomName,
+                membership,
+                messages,
+                showUsers
             };
-        }
-
-        let roomUserList;
-        if (room && room.showUsers) {
-            roomUserList = <RoomUserList users={room.members} />;
+            roomChat = (
+                <RoomChat
+                    loginUserName={loginUserName}
+                    room={room}
+                    roomActions={roomActions}
+                />
+            );
         }
 
         return (
@@ -33,15 +44,10 @@ class RoomsPane extends React.Component {
                 <RoomList
                     rooms={rooms}
                     roomActions={roomActions}
-                    selected={selected}
+                    selected={roomName}
                 />
                 <div id="room-selected-pane">
-                    <RoomChat
-                        login_user_name={login_user_name}
-                        room={room}
-                        roomActions={roomActions}
-                    />
-                    {roomUserList}
+                    {roomChat}
                 </div>
             </div>
         );
@@ -49,18 +55,24 @@ class RoomsPane extends React.Component {
 }
 
 RoomsPane.propTypes = {
-    login_user_name: PropTypes.string,
-    rooms: ImmutablePropTypes.orderedMap.isRequired,
-    roomActions: PropTypes.object.isRequired,
-    selected: PropTypes.string
+    loginUserName: PropTypes.string.isRequired,
+    params:        PropTypes.shape({
+        roomName: PropTypes.string
+    }),
+    rooms:         ImmutablePropTypes.orderedMap.isRequired,
+    roomActions:   PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
-    login_user_name: state.login.username,
     rooms: state.rooms.rooms,
-    selected: state.rooms.selected
+    loginUserName: state.login.username
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    roomActions: bindActionCreators(RoomActions, dispatch)
 });
 
 export default connect(
     mapStateToProps,
+    mapDispatchToProps
 )(RoomsPane);

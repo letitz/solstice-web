@@ -4,17 +4,16 @@ import { connect } from "react-redux";
 import LoginStatusPane from "../components/LoginStatusPane";
 import SocketStatusPane from "../components/SocketStatusPane";
 
-const Footer = ({ actions, login, socket }) => {
+const Footer = ({ login, socket }) => {
     return (
         <footer>
             <SocketStatusPane {...socket} />
-            <LoginStatusPane {...login} loginActions={actions.login} />
+            <LoginStatusPane {...login} />
         </footer>
     );
 };
 
 Footer.propTypes = {
-    actions: PropTypes.object.isRequired,
     login: PropTypes.object.isRequired,
     socket: PropTypes.object.isRequired
 };

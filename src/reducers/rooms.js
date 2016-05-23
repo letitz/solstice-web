@@ -4,46 +4,43 @@ import {
     ROOM_JOIN,
     ROOM_LEAVE,
     ROOM_MESSAGE,
-    ROOM_SELECT,
     ROOM_SHOW_USERS,
     ROOM_HIDE_USERS,
     SOCKET_RECEIVE_MESSAGE
 } from "../constants/ActionTypes";
 
 const initialState = {
-    rooms: Immutable.OrderedMap(),
-    selected: null
+    rooms: Immutable.OrderedMap()
 };
 
-const reduceRoomList = (old_rooms, room_list) => {
+const reduceRoomList = (oldRoomMap, roomList) => {
     // First sort the room list by room name
-    room_list.sort((room_pair_1, room_pair_2) => {
-        const name_1 = room_pair_1[0];
-        const name_2 = room_pair_2[0];
-        if (name_1 < name_2) {
+    roomList.sort(([ roomName1 ], [ roomName2 ]) => {
+        if (roomName1 < roomName2) {
             return -1;
-        } else if (name_1 > name_2) {
+        } else if (roomName1 > roomName2) {
             return 1;
         }
         return 0;
     });
 
     // Then build the new rooms map
-    let new_rooms = Immutable.OrderedMap();
-    for (const [ room_name, room_data ] of room_list) {
+    let newRoomMap = Immutable.OrderedMap();
+
+    for (const [ roomName, newRoomData ] of roomList) {
         // Transform room_data.messages to an immutable list.
-        room_data.messages = Immutable.List(room_data.messages);
+        newRoomData.messages = Immutable.List(newRoomData.messages);
         // Get the old room data.
-        const old_data = old_rooms.get(room_name);
+        const oldRoomData = oldRoomMap.get(roomName);
         // Merge the old data and the new data, overwriting with new data if
         // conflicting.
-        const new_data = {
-            ...old_data,
-            ...room_data
+        const mergedRoomData = {
+            ...oldRoomData,
+            ...newRoomData
         };
-        new_rooms = new_rooms.set(room_name, new_data);
+        newRoomMap = newRoomMap.set(roomName, mergedRoomData);
     }
-    return new_rooms;
+    return newRoomMap;
 };
 
 const reduceReceiveMessage = (rooms, { variant, data }) => {
@@ -102,12 +99,6 @@ export default (state = initialState, action) => {
 
         case ROOM_MESSAGE:
             return state;
-
-        case ROOM_SELECT:
-            return {
-                ...state,
-                selected: payload
-            };
 
         case ROOM_JOIN:
         {

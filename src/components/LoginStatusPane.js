@@ -10,86 +10,58 @@ import {
     LOGIN_STATUS_FAILURE
 } from "../constants/login";
 
-const ID = "login-status-pane";
-
 class LoginStatusPane extends React.Component
 {
     constructor(props) {
         super(props);
     }
 
-    componentDidMount() {
-        const { status, loginActions } = this.props;
-        if (status == LOGIN_STATUS_UNKNOWN) {
-            loginActions.getStatus();
-        }
-    }
-
-    render_unknown() {
-        return (
-            <div id={ID}>
-                Login status: unknown
-            </div>
-        );
-    }
-
-    render_getting() {
-        return (
-            <div id={ID}>
-                Login status: fetching...
-            </div>
-        );
-    }
-
-    render_pending() {
-        return (
-            <div id={ID}>
-                Logging in as {this.props.username}...
-            </div>
-        );
-    }
-
-    render_success() {
-        let motd_element;
-        if (this.props.motd) {
-            motd_element = (
-                <span id="login-motd">
-                    MOTD: {this.props.motd}
-                </span>
-            );
-        }
-        return (
-            <div id={ID}>
-                Logged in as {this.props.username}
-                {motd_element}
-            </div>
-        );
-    }
-
-    render_failure() {
-        return (
-            <div id={ID}>
-                Failed to log in as {this.props.username}
-                <span id="login-reason">
-                    Reason: {this.props.reason}
-                </span>
-            </div>
-        );
-    }
-
     render() {
+        let statusText;
+        let motd;
+        let reason;
+
         switch (this.props.status) {
             case LOGIN_STATUS_UNKNOWN:
-                return this.render_unknown();
+                statusText = "unknown";
+                break;
+
             case LOGIN_STATUS_GETTING:
-                return this.render_getting();
+                statusText = "fetching";
+                break;
+
             case LOGIN_STATUS_PENDING:
-                return this.render_pending();
+                statusText = `logging in as ${this.props.username}`;
+                break;
+
             case LOGIN_STATUS_SUCCESS:
-                return this.render_success();
+                statusText = `logged in as ${this.props.username}`;
+                motd = (
+                    <span id="login-status-motd">
+                        MOTD: {this.props.motd}
+                    </span>
+                );
+                break;
+
             case LOGIN_STATUS_FAILURE:
-                return this.render_failure();
+                statusText = `failed to log in as ${this.props.username}`;
+                reason = (
+                    <span id="login-status-reason">
+                        Reason: {this.props.reason}
+                    </span>
+                );
+                break;
         }
+
+        return (
+            <div id="login-status-pane">
+                <span id="login-status-text">
+                    Login status: {statusText}
+                </span>
+                {motd}
+                {reason}
+            </div>
+        );
     }
 }
 
@@ -97,10 +69,7 @@ LoginStatusPane.propTypes = {
     status: propTypeSymbol.isRequired,
     username: PropTypes.string,
     motd: PropTypes.string,
-    reason: PropTypes.string,
-    loginActions: PropTypes.shape({
-        getStatus: PropTypes.func.isRequired
-    }).isRequired
+    reason: PropTypes.string
 };
 
 export default LoginStatusPane;

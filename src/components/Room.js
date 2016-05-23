@@ -1,23 +1,27 @@
 import React, { PropTypes } from "react";
+import { Link } from "react-router";
 
-const Room = ({ isSelected, name, onClick, room }) => {
+const Room = ({ name, onClick, room }) => {
     const classes = ["room"];
-    if (isSelected) {
-        classes.push("room-selected");
-    }
     if (room.membership == "Member") {
         classes.push("room-joined");
     }
+
+    const base64Name = btoa(encodeURIComponent(name));
+    const path = `/app/rooms/${base64Name}`;
+
     return (
-        <a className={classes.join(" ")} onClick={onClick} href="#">
+        <Link to={path}
+            activeClassName="room-selected"
+            className={classes.join(" ")}
+        >
             <span className="room-name">{name}</span>
             <span className="room-user-count">({room.user_count})</span>
-        </a>
+        </Link>
     );
 };
 
 Room.propTypes = {
-    isSelected: PropTypes.bool.isRequired,
     name: PropTypes.string.isRequired,
     onClick: PropTypes.func.isRequired,
     room: PropTypes.shape({
