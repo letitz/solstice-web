@@ -67,8 +67,8 @@ RoomsPane.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-    roomMap: state.rooms.get("roomMap"),
-    loginUserName: state.login.username
+    roomMap:       state.rooms.get("roomMap"),
+    loginUserName: state.login.get("username")
 });
 
 const mapDispatchToProps = (dispatch) => ({

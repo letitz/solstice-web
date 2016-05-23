@@ -1,3 +1,5 @@
+import Immutable from "immutable";
+
 import {
     LOGIN_GET_STATUS,
     SOCKET_RECEIVE_MESSAGE
@@ -11,9 +13,9 @@ import {
     LOGIN_STATUS_FAILURE
 } from "../constants/login";
 
-const initialState = {
+const initialState = Immutable.Map({
     status: LOGIN_STATUS_UNKNOWN
-};
+});
 
 const reduceReceiveMessage = (state, message) => {
     const { variant, data } = message;
@@ -26,29 +28,26 @@ const reduceReceiveMessage = (state, message) => {
         case "Pending":
         { // sub-block required otherwise const username declarations clash
             const [ username ] = data.fields;
-            return {
-                status: LOGIN_STATUS_PENDING,
-                username
-            };
+            return state
+                .set("status", LOGIN_STATUS_PENDING)
+                .set("username", username);
         }
         case "Success":
         { // sub-block required otherwise const username declarations clash
             const [ username, motd ] = data.fields;
-            return {
-                status: LOGIN_STATUS_SUCCESS,
-                username,
-                motd
-            };
+            return state
+                .set("status", LOGIN_STATUS_SUCCESS)
+                .set("username", username)
+                .set("motd", motd);
         }
 
         case "Failure":
         { // sub-block required otherwise const username declarations clash
             const [ username, reason ] = data.fields;
-            return {
-                status: LOGIN_STATUS_FAILURE,
-                username,
-                reason
-            };
+            return state
+                .set("status", LOGIN_STATUS_FAILURE)
+                .set("username", username)
+                .set("reason", reason);
         }
 
         default:
@@ -60,10 +59,7 @@ export default (state = initialState, action) => {
     const { type, payload } = action;
     switch (type) {
         case LOGIN_GET_STATUS:
-            return {
-                ...state,
-                status: LOGIN_STATUS_GETTING
-            };
+            return state.set("status", LOGIN_STATUS_GETTING);
 
         case SOCKET_RECEIVE_MESSAGE:
             return reduceReceiveMessage(state, payload);

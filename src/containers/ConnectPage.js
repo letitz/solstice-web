@@ -33,7 +33,8 @@ class ConnectPage extends React.Component {
         const { actions, login, router, socket } = props;
         if (socket.state === STATE_OPEN)
         {
-            switch (login.status) {
+            const loginStatus = login.get("status");
+            switch (loginStatus) {
                 case LOGIN_STATUS_UNKNOWN:
                     actions.login.getStatus();
                     break;
@@ -46,22 +47,10 @@ class ConnectPage extends React.Component {
     }
 
     render() {
-        const { actions, login, socket } = this.props;
-
-        let loginStatusPane;
-
-        if (socket.state === STATE_OPEN &&
-                login.status === LOGIN_STATUS_UNKNOWN)
-        {
-            loginStatusPane = (
-                <LoginStatusPane {...login} loginActions={actions.login} />
-            );
-        }
-
+        const { actions, socket } = this.props;
         return (
             <div id="connect-page">
                 <ConnectForm socket={socket} actions={actions} />
-                {loginStatusPane}
             </div>
         );
     }
