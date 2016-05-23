@@ -17,17 +17,12 @@ class RoomList extends React.Component {
 
         const children = [];
 
-        for (const [room_name, room_data] of roomMap) {
-            const onClick = (event) => {
-                roomActions.select(room_name);
-            };
-
+        for (const [roomName, roomData] of roomMap) {
             children.push(
-                <li key={room_name}>
+                <li key={roomName}>
                     <Room
-                        onClick={onClick}
-                        name={room_name}
-                        room={room_data}
+                        name={roomName}
+                        room={roomData}
                     />
                 </li>
             );

@@ -1,4 +1,5 @@
 import React, { PropTypes } from "react";
+import { withRouter } from "react-router";
 import ImmutablePropTypes from "react-immutable-proptypes";
 
 const make_header = (title, showUsersButton, leaveButton) => (
@@ -9,7 +10,7 @@ const make_header = (title, showUsersButton, leaveButton) => (
     </div>
 );
 
-const RoomChatHeader = ({ room, roomActions }) => {
+const RoomChatHeader = ({ room, roomActions, router }) => {
     if (!room) {
         return make_header("Select a room");
     }
@@ -18,7 +19,7 @@ const RoomChatHeader = ({ room, roomActions }) => {
         case "Member":
         {
             const onClickLeave = (event) => {
-                roomActions.select(null);
+                router.push("/app/rooms");
                 roomActions.leave(room.name);
             };
             const leaveButton = <button onClick={onClickLeave}>Leave</button>;
@@ -59,7 +60,8 @@ RoomChatHeader.propTypes = {
     roomActions: PropTypes.shape({
         leave: PropTypes.func.isRequired,
         select: PropTypes.func.isRequired
-    }).isRequired
+    }).isRequired,
+    router: PropTypes.object.isRequired
 };
 
-export default RoomChatHeader;
+export default withRouter(RoomChatHeader);

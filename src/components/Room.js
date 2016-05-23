@@ -1,7 +1,7 @@
 import React, { PropTypes } from "react";
 import { Link } from "react-router";
 
-const Room = ({ name, onClick, room }) => {
+const Room = ({ name, room }) => {
     const classes = ["room"];
     if (room.membership == "Member") {
         classes.push("room-joined");
@@ -23,7 +23,6 @@ const Room = ({ name, onClick, room }) => {
 
 Room.propTypes = {
     name: PropTypes.string.isRequired,
-    onClick: PropTypes.func.isRequired,
     room: PropTypes.shape({
         membership: PropTypes.string.isRequired,
         user_count: PropTypes.number.isRequired

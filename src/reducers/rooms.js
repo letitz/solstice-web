@@ -9,13 +9,14 @@ import {
     SOCKET_RECEIVE_MESSAGE
 } from "../constants/ActionTypes";
 
-const initialState = {
+const initialState = Immutable.Map({
     roomMap:        Immutable.OrderedMap(),
     roomNameByHash: Immutable.Map()
-};
+});
 
 const reduceRoomList = (state, roomList) => {
-    const { roomMap, roomNameByHash } = state;
+    const roomMap = state.get("roomMap");
+    const roomNameByHash = state.get("roomNameByHash");
 
     // First sort the room list by room name
     roomList.sort(([ roomName1 ], [ roomName2 ]) => {
@@ -43,11 +44,10 @@ const reduceRoomList = (state, roomList) => {
         };
         newRoomMap = newRoomMap.set(roomName, mergedRoomData);
     }
-    return {
-        ...state,
-        roomMap: newRoomMap,
-        roomNameByHash
-    };
+
+    return state
+        .set("roomMap", newRoomMap)
+        .set("roomNameByHash", roomNameByHash);
 };
 
 const reduceReceiveMessageRoom = (roomData, { variant, data }) => {
@@ -83,14 +83,15 @@ const reduceReceiveMessage = (state, message) => {
         case "RoomMessageResponse":
         {
             const { room_name } = data;
-            const roomData = state.roomMap.get(room_name);
-            const roomMap = state.roomMap.set(room_name,
-                reduceReceiveMessageRoom(roomData, { variant, data })
-            );
-            return {
-                ...state,
-                roomMap
-            };
+            const roomMap = state.get("roomMap");
+            return state.updateIn(["roomMap", data.room_name], (roomData) => {
+                if (roomData) {
+                    return reduceReceiveMessageRoom(roomData, message);
+                } else {
+                    console.log(`Error: unknown room ${data.room_name}`);
+                    return roomData;
+                }
+            });
         }
 
         case "RoomListResponse":
@@ -141,14 +142,14 @@ export default (state = initialState, action) => {
         case ROOM_SHOW_USERS:
         case ROOM_HIDE_USERS:
         {
-            const roomData = state.roomMap.get(payload);
-            const roomMap = state.roomMap.set(payload,
-                reduceRoom(roomData, action)
-            );
-            return {
-                ...state,
-                roomMap
-            };
+            return state.updateIn(["roomMap", payload], (roomData) => {
+                if (roomData) {
+                    return reduceRoom(roomData, action);
+                } else {
+                    console.log(`Error: unknown room ${payload}`);
+                    return roomData;
+                }
+            });
         }
 
         case ROOM_MESSAGE:
