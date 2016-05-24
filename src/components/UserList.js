@@ -1,6 +1,8 @@
 import React, { PropTypes } from "react";
 import ImmutablePropTypes from "react-immutable-proptypes";
 
+import User from "./User";
+
 class UserList extends React.Component {
     constructor(props) {
         super(props);
@@ -19,7 +21,7 @@ class UserList extends React.Component {
         for (const [ userName, userData ] of users.byName) {
             children.push(
                 <li key={userName}>
-                    {userName}
+                    <User name={userName} />
                 </li>
             );
         }
