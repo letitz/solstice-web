@@ -11,10 +11,19 @@ import {
     SOCKET_RECEIVE_MESSAGE
 } from "../constants/ActionTypes";
 
-const initialState = OrderedMap();
+const RoomRecord = Immutable.Record({
+    membership: "",
+    visibility: "",
+    operated:   false,
+    userCount:  0,
+    owner:      "",
+    operators:  Immutable.Map(),
+    members:    Immutable.Map(),
+    messages:   Immutable.List(),
+    tickers:    Immutable.List()
+});
 
-const reduceRoomList = (state, roomList) => {
-};
+const initialState = OrderedMap();
 
 const reduceReceiveMessageRoom = (roomData, { variant, data }) => {
     switch (variant) {
@@ -27,8 +36,7 @@ const reduceReceiveMessageRoom = (roomData, { variant, data }) => {
         case "RoomMessageResponse":
         {
             const { user_name, message } = data;
-            const messages = roomData.get("messages")
-                .push({user_name, message});
+            const messages = roomData.messages.push({user_name, message});
             return roomData.set("messages", messages);
         }
     }
@@ -54,14 +62,18 @@ const reduceReceiveMessage = (state, message) => {
 
         case "RoomListResponse":
             return state.updateAll(data.rooms, (newData, oldData) => {
-                if (oldData) {
-                    // Remove the messages array, we want to overwrite it
-                    // completely.
-                    oldData.remove("messages");
-                } else {
-                    oldData = Immutable.Map();
+                if(!oldData) {
+                    oldData = RoomRecord();
                 }
-                return oldData.merge(newData);
+                return oldData
+                    .set("membership", newData.membership)
+                    .set("visibility", newData.visibility)
+                    .set("operated",   newData.operated)
+                    .set("userCount",  newData.user_count)
+                    .set("owner",      newData.owner)
+                    .set("operators",  newData.operators)
+                    .set("members",    newData.members)
+                    .set("tickers",    newData.tickers);
             });
 
         default:

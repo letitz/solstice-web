@@ -23,9 +23,9 @@ const RoomsPane = (props) => {
         if (roomData) {
             const room = {
                 name: roomName,
-                membership: roomData.get("membership"),
-                messages:   roomData.get("messages"),
-                showUsers:  roomData.get("showUsers")
+                membership: roomData.membership,
+                messages:   roomData.messages,
+                showUsers:  roomData.showUsers
             };
 
             roomChat = (

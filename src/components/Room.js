@@ -5,8 +5,7 @@ import ImmutablePropTypes from "react-immutable-proptypes";
 import md5 from "md5";
 
 const Room = ({ name, data }) => {
-    const membership = data.get("membership");
-    const user_count = data.get("user_count");
+    const { membership, userCount } = data;
 
     const classes = ["room"];
     if (membership == "Member") {
@@ -21,7 +20,7 @@ const Room = ({ name, data }) => {
             className={classes.join(" ")}
         >
             <span className="room-name">{name}</span>
-            <span className="room-user-count">({user_count})</span>
+            <span className="room-user-count">({userCount})</span>
         </Link>
     );
 };
