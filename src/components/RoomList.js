@@ -1,4 +1,5 @@
 import React, { PropTypes } from "react";
+import ImmutablePropTypes from "react-immutable-proptypes";
 
 import Room from "./Room";
 import RoomListHeader from "./RoomListHeader";
@@ -13,11 +14,11 @@ class RoomList extends React.Component {
     }
 
     render() {
-        const { roomMap, roomActions } = this.props;
+        const { rooms, roomActions } = this.props;
 
         const children = [];
 
-        for (const [roomName, roomData] of roomMap) {
+        for (const [roomName, roomData] of rooms.get("byName")) {
             children.push(
                 <li key={roomName}>
                     <Room
@@ -39,7 +40,7 @@ class RoomList extends React.Component {
 }
 
 RoomList.propTypes = {
-    roomMap: PropTypes.object.isRequired,
+    rooms: ImmutablePropTypes.record.isRequired,
     roomActions: PropTypes.shape({
         getList: PropTypes.func.isRequired
     }).isRequired

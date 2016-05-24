@@ -24,7 +24,7 @@ const createRoutes = (store) => {
             <IndexRoute component={ConnectPage} />
 
             <Route path="app" onEnter={requireLoggedIn} component={SolsticeApp}>
-                <Route path="rooms(/:roomName)" component={RoomsPane} />
+                <Route path="rooms(/:roomNameHash)" component={RoomsPane} />
             </Route>
         </Route>
     );

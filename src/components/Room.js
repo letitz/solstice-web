@@ -1,14 +1,16 @@
 import React, { PropTypes } from "react";
 import { Link } from "react-router";
 
+import md5 from "md5";
+
 const Room = ({ name, membership, userCount }) => {
     const classes = ["room"];
     if (membership == "Member") {
         classes.push("room-joined");
     }
 
-    const base64Name = btoa(encodeURIComponent(name));
-    const path = `/app/rooms/${base64Name}`;
+    const hash = md5(name);
+    const path = `/app/rooms/${hash}`;
 
     return (
         <Link to={path}

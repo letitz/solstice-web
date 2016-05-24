@@ -1,5 +1,7 @@
 import Immutable from "immutable";
 
+import OrderedMap from "../utils/OrderedMap";
+
 import {
     ROOM_JOIN,
     ROOM_LEAVE,
@@ -9,48 +11,9 @@ import {
     SOCKET_RECEIVE_MESSAGE
 } from "../constants/ActionTypes";
 
-const initialState = Immutable.Map({
-    roomMap:        Immutable.OrderedMap(),
-    roomNameByHash: Immutable.Map()
-});
+const initialState = OrderedMap();
 
 const reduceRoomList = (state, roomList) => {
-    const roomMap = state.get("roomMap");
-    const roomNameByHash = state.get("roomNameByHash");
-
-    // First sort the room list by room name
-    roomList.sort(([ roomName1 ], [ roomName2 ]) => {
-        if (roomName1 < roomName2) {
-            return -1;
-        } else if (roomName1 > roomName2) {
-            return 1;
-        }
-        return 0;
-    });
-
-    // Then build the new rooms map
-    let newRoomMap = Immutable.OrderedMap();
-
-    for (const [ roomName, newRoomData ] of roomList) {
-        // Get the old room data.
-        let roomData = roomMap.get(roomName);
-        if (roomData) {
-            // Scrap the old message list, we only want the new message list.
-            roomData.remove("messages");
-        } else {
-            // If the room did not exist, make up an empty one.
-            roomData = Immutable.Map();
-        }
-        // Merge the old data and the new data, overwriting with new data if
-        // conflicting.
-        const mergedRoomData = roomData.merge(newRoomData);
-        // Insert that in the new room map.
-        newRoomMap = newRoomMap.set(roomName, mergedRoomData);
-    }
-
-    return state
-        .set("roomMap", newRoomMap)
-        .set("roomNameByHash", roomNameByHash);
 };
 
 const reduceReceiveMessageRoom = (roomData, { variant, data }) => {
@@ -79,7 +42,7 @@ const reduceReceiveMessage = (state, message) => {
         case "RoomMessageResponse":
         {
             const { room_name } = data;
-            return state.updateIn(["roomMap", data.room_name], (roomData) => {
+            return state.updateByName(data.room_name, (roomData) => {
                 if (roomData) {
                     return reduceReceiveMessageRoom(roomData, message);
                 } else {
@@ -90,7 +53,16 @@ const reduceReceiveMessage = (state, message) => {
         }
 
         case "RoomListResponse":
-            return reduceRoomList(state, data.rooms);
+            return state.updateAll(data.rooms, (newData, oldData) => {
+                if (oldData) {
+                    // Remove the messages array, we want to overwrite it
+                    // completely.
+                    oldData.remove("messages");
+                } else {
+                    oldData = Immutable.Map();
+                }
+                return oldData.merge(newData);
+            });
 
         default:
             return state;
@@ -125,7 +97,7 @@ export default (state = initialState, action) => {
         case ROOM_SHOW_USERS:
         case ROOM_HIDE_USERS:
         {
-            return state.updateIn(["roomMap", payload], (roomData) => {
+            return state.updateByName(payload, (roomData) => {
                 if (roomData) {
                     return reduceRoom(roomData, action);
                 } else {
