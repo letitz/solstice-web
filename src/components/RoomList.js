@@ -2,45 +2,17 @@ import React, { PropTypes } from "react";
 import ImmutablePropTypes from "react-immutable-proptypes";
 
 import Room from "./Room";
-import RoomListHeader from "./RoomListHeader";
+import SearchableList from "./SearchableList";
 
-class RoomList extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+const ComposedSearchableList = SearchableList(Room);
 
-    componentDidMount() {
-        const { rooms, roomActions } = this.props;
-        if (rooms.shouldUpdate()) {
-            roomActions.getList();
-        }
-    }
-
-    render() {
-        const { rooms, roomActions } = this.props;
-
-        const children = [];
-
-        for (const [roomName, roomData] of rooms.byName) {
-            children.push(
-                <li key={roomName}>
-                    <Room
-                        name={roomName}
-                        membership={roomData.get("membership")}
-                        userCount={roomData.get("user_count")}
-                    />
-                </li>
-            );
-        }
-
-        return (
-            <div id="room-list">
-                <RoomListHeader refresh={this.props.roomActions.getList}/>
-                <ul> {children} </ul>
-            </div>
-        );
-    }
-}
+const RoomList = ({ rooms, roomActions }) => (
+    <ComposedSearchableList
+        id="room-list"
+        itemMap={rooms}
+        refresh={roomActions.getList}
+    />
+);
 
 RoomList.propTypes = {
     rooms: ImmutablePropTypes.record.isRequired,
