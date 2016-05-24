@@ -4,6 +4,16 @@ import OrderedMap from "../utils/OrderedMap";
 
 import { SOCKET_RECEIVE_MESSAGE } from "../constants/ActionTypes";
 
+const UserRecord = Immutable.Record({
+    status:       "",
+    averageSpeed: 0,
+    numDownloads: 0,
+    numFiles:     0,
+    numFolders:   0,
+    numFreeSlots: 0,
+    country:      ""
+});
+
 const initialState = OrderedMap();
 
 const reduceUsersReceiveMessage = (users, message) => {
@@ -12,9 +22,16 @@ const reduceUsersReceiveMessage = (users, message) => {
             return users.updateAll(message.data.user_list,
                 (newUser, oldUser) => {
                     if (!oldUser) {
-                        oldUser = Immutable.Map();
+                        oldUser = UserRecord();
                     }
-                    oldUser.merge(newUser);
+                    return oldUser
+                        .set("status",       newUser.status)
+                        .set("averageSpeed", newUser.average_speed)
+                        .set("numDownloads", newUser.num_downloads)
+                        .set("numFiles",     newUser.num_files)
+                        .set("numFolders",   newUser.num_folders)
+                        .set("numFreeSlots", newUser.num_free_slots)
+                        .set("country",      newUser.country);
                 }
             );
 
