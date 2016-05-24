@@ -14,7 +14,7 @@ const createRoutes = (store) => {
     const requireLoggedIn = (nextState, replaceState) => {
         let { socket, login } = store.getState();
         if (socket.state !== STATE_OPEN ||
-                login.get("status") !== LOGIN_STATUS_SUCCESS)
+                login.status !== LOGIN_STATUS_SUCCESS)
         {
             replaceState({}, "/");
         }

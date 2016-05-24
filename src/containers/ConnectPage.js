@@ -33,8 +33,7 @@ class ConnectPage extends React.Component {
         const { actions, login, router, socket } = props;
         if (socket.state === STATE_OPEN)
         {
-            const loginStatus = login.get("status");
-            switch (loginStatus) {
+            switch (login.status) {
                 case LOGIN_STATUS_UNKNOWN:
                     actions.login.getStatus();
                     break;

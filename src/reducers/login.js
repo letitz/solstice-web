@@ -13,9 +13,14 @@ import {
     LOGIN_STATUS_FAILURE
 } from "../constants/login";
 
-const initialState = Immutable.Map({
-    status: LOGIN_STATUS_UNKNOWN
+const LoginRecord = Immutable.Record({
+    status:   LOGIN_STATUS_UNKNOWN,
+    username: undefined,
+    motd:     undefined,
+    reason:   undefined
 });
+
+const initialState = new LoginRecord();
 
 const reduceReceiveMessage = (state, message) => {
     const { variant, data } = message;

@@ -13,17 +13,17 @@ const Footer = ({ login, socket }) => {
                 url={socket.url}
             />
             <LoginStatusPane
-                status={login.get("status")}
-                username={login.get("username")}
-                motd={login.get("motd")}
-                reason={login.get("reason")}
+                status={login.status}
+                username={login.username}
+                motd={login.motd}
+                reason={login.reason}
             />
         </footer>
     );
 };
 
 Footer.propTypes = {
-    login:  ImmutablePropTypes.map.isRequired,
+    login:  ImmutablePropTypes.record.isRequired,
     socket: ImmutablePropTypes.record.isRequired
 };
 
