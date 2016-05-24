@@ -1,9 +1,13 @@
 import Immutable from "immutable";
 import md5 from "md5";
 
+// Updates should be requested every 5 minutes at most.
+const UPDATE_INTERVAL_MS = 5 * 60 * 1000;
+
 const MapRecord = Immutable.Record({
-    byName: Immutable.OrderedMap(),
-    byHash: Immutable.Map()
+    byName:      Immutable.OrderedMap(),
+    byHash:      Immutable.Map(),
+    lastUpdated: 0
 });
 
 class OrderedMap extends MapRecord {
@@ -63,7 +67,15 @@ class OrderedMap extends MapRecord {
             newByName = newByName.set(name, mergedData);
         }
 
-        return new OrderedMap({ byName: newByName, byHash });
+        return new OrderedMap({
+            byName: newByName,
+            byHash,
+            lastUpdated: Date.now()
+        });
+    }
+
+    shouldUpdate() {
+        return (Date.now() - this.lastUpdated) > UPDATE_INTERVAL_MS;
     }
 }
 

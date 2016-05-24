@@ -79,6 +79,10 @@ export default (state = initialState, { type, payload }) => {
             return state;
         }
 
+        case types.USER_GET_LIST:
+            sendRequest(ControlRequest.userList());
+            return state;
+
         default:
             return state;
     }

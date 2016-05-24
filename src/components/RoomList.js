@@ -10,7 +10,10 @@ class RoomList extends React.Component {
     }
 
     componentDidMount() {
-        this.props.roomActions.getList();
+        const { rooms, roomActions } = this.props;
+        if (rooms.shouldUpdate()) {
+            roomActions.getList();
+        }
     }
 
     render() {
@@ -18,7 +21,7 @@ class RoomList extends React.Component {
 
         const children = [];
 
-        for (const [roomName, roomData] of rooms.get("byName")) {
+        for (const [roomName, roomData] of rooms.byName) {
             children.push(
                 <li key={roomName}>
                     <Room

@@ -25,5 +25,10 @@ export default {
             room_name,
             message
         }]
+    }),
+
+    userList: () =>({
+        variant: "UserListRequest",
+        fields: []
     })
 };

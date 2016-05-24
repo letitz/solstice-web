@@ -3,6 +3,7 @@ import { Route, IndexRoute } from 'react-router';
 
 import ConnectPage from "./containers/ConnectPage";
 import RoomsPane from "./containers/RoomsPane";
+import UsersPane from "./containers/UsersPane";
 
 import SolsticeApp from "./components/SolsticeApp";
 
@@ -25,6 +26,7 @@ const createRoutes = (store) => {
 
             <Route path="app" onEnter={requireLoggedIn} component={SolsticeApp}>
                 <Route path="rooms(/:roomNameHash)" component={RoomsPane} />
+                <Route path="users(/:userNameHash)" component={UsersPane} />
             </Route>
         </Route>
     );

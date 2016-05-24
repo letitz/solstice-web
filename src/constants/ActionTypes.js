@@ -18,3 +18,6 @@ export const ROOM_LEAVE      = "ROOM_LEAVE";
 export const ROOM_MESSAGE    = "ROOM_MESSAGE";
 export const ROOM_SHOW_USERS = "ROOM_SHOW_USERS";
 export const ROOM_HIDE_USERS = "ROOM_HIDE_USERS";
+
+// User actions
+export const USER_GET_LIST = "USER_GET_LIST";

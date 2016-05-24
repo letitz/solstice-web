@@ -8,6 +8,9 @@ const Header = (props) => {
             <Link to="/app/rooms" activeClassName="active">
                 Rooms
             </Link>
+            <Link to="/app/users" activeClassName="active">
+                Users
+            </Link>
         </header>
     );
 };
