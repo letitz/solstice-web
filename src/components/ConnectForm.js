@@ -12,7 +12,7 @@ const ConnectForm = (props) => {
         return actions.socket.open(values.url, actions.socketHandlers);
     });
 
-    const isSocketClosed = socket.get("state") === STATE_CLOSED;
+    const isSocketClosed = socket.state === STATE_CLOSED;
 
     return (
         <div id="connect-form">
@@ -25,8 +25,8 @@ const ConnectForm = (props) => {
                 </button>
             </form>
             <SocketStatusPane
-                state={socket.get("state")}
-                url={socket.get("url")}
+                state={socket.state}
+                url={socket.url}
             />
         </div>
     );
@@ -35,7 +35,7 @@ const ConnectForm = (props) => {
 ConnectForm.propTypes = {
     fields:       PropTypes.object.isRequired,
     handleSubmit: PropTypes.func.isRequired,
-    socket:       ImmutablePropTypes.map.isRequired,
+    socket:       ImmutablePropTypes.record.isRequired,
     actions:      PropTypes.object.isRequired
 };
 

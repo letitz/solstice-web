@@ -31,7 +31,7 @@ class ConnectPage extends React.Component {
 
     getLoginStatusOrRedirect(props) {
         const { actions, login, router, socket } = props;
-        if (socket.get("state") === STATE_OPEN)
+        if (socket.state === STATE_OPEN)
         {
             const loginStatus = login.get("status");
             switch (loginStatus) {

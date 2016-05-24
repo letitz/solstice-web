@@ -9,8 +9,8 @@ const Footer = ({ login, socket }) => {
     return (
         <footer>
             <SocketStatusPane
-                state={socket.get("state")}
-                url={socket.get("url")}
+                state={socket.state}
+                url={socket.url}
             />
             <LoginStatusPane
                 status={login.get("status")}
@@ -24,7 +24,7 @@ const Footer = ({ login, socket }) => {
 
 Footer.propTypes = {
     login:  ImmutablePropTypes.map.isRequired,
-    socket: ImmutablePropTypes.map.isRequired
+    socket: ImmutablePropTypes.record.isRequired
 };
 
 const mapStateToProps = ({ socket, login }) => ({ socket, login });

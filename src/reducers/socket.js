@@ -7,14 +7,18 @@ import {
 
 import ControlRequest from "../utils/ControlRequest";
 
-const initialState = Immutable.Map({
-    state: STATE_CLOSED
+const SocketRecord = Immutable.Record({
+    state:  STATE_CLOSED,
+    socket: undefined,
+    url:    undefined
 });
+
+const initialState = new SocketRecord();
 
 export default (state = initialState, { type, payload }) => {
     const sendRequest = (controlRequest) => {
         try {
-            state.get("socket").send(JSON.stringify(controlRequest));
+            state.socket.send(JSON.stringify(controlRequest));
         } catch (err) {
             console.log(`Socket error: failed to send ${controlRequest}`);
         }
@@ -23,7 +27,7 @@ export default (state = initialState, { type, payload }) => {
     switch (type) {
         case types.SOCKET_SET_OPENING:
         {
-            if (state.get("state") !== STATE_CLOSED) {
+            if (state.state !== STATE_CLOSED) {
                 console.log("Cannot open socket, already open");
                 return state;
             }
@@ -46,7 +50,7 @@ export default (state = initialState, { type, payload }) => {
 
         case types.SOCKET_SET_CLOSING:
             // Ooh bad stateful reducing...
-            state.get("socket").close();
+            state.socket.close();
             return state.set("state", STATE_CLOSING);
 
         case types.SOCKET_SET_CLOSED:
@@ -54,7 +58,7 @@ export default (state = initialState, { type, payload }) => {
 
         case types.SOCKET_SET_ERROR:
             console.log("Socket error");
-            return state.set("state", state.get("socket").readyState);
+            return state.set("state", state.socket.readyState);
 
         case types.LOGIN_GET_STATUS:
             sendRequest(ControlRequest.loginStatus());
